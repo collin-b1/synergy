@@ -1,5 +1,8 @@
-import { BoardConfiguration } from "@/lib/types";
+import { GridConfiguration } from "@/lib/types";
 
-export const generalizeBoardArray = (board: BoardConfiguration): string => {
-  return board.map(b => b.join("")).join("");
+export const createEmptyConfiguration = (
+  sizeX: number,
+  sizeY: number
+): GridConfiguration => {
+  return Array.from(Array(sizeY), () => Array(sizeX).fill(0));
 };

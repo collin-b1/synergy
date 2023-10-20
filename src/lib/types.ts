@@ -9,16 +9,16 @@ export interface GameBoard {
   obstacles: Movable[];
 }
 
+export type GridConfiguration = Array<Array<number>>;
+
 export interface Movable {
   x: number;
   y: number;
 }
 
-export type BoardConfiguration = Array<Array<number>>;
-
 export interface GameLevel {
   // Concatenated string of each board row
-  starting: BoardConfiguration;
+  startingConfiguration: GridConfiguration;
 
   // Difficulty of the level
   difficulty: 1 | 2 | 3 | 4 | 5;

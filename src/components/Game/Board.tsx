@@ -1,60 +1,43 @@
-import { GridPosition } from "@/lib/types";
-import { useState } from "react";
+import { GridConfiguration, GridPosition } from "@/lib/types";
+import { useEffect, useState } from "react";
+import Tile from "./Tile";
 
 interface BoardProps {
-  sizeX: number;
-  sizeY: number;
+  configuration: GridConfiguration;
 }
-
-interface TileProps {
-  posX: number;
-  posY: number;
-  selected: boolean;
-  setSelectedTile: React.Dispatch<React.SetStateAction<GridPosition | null>>;
-}
-
-const Tile = (props: TileProps) => {
-  const handleClick = () => {
-    props.setSelectedTile(() => {
-      return props.selected ? null : { column: props.posX, row: props.posY };
-    });
-  };
-
-  return (
-    <div
-      className={`${
-        props.selected ? "border-4 border-blue-500" : ""
-      } bg-gray-300 p-4`}
-      onClick={handleClick}
-      role="gridcell"
-    ></div>
-  );
-};
 
 const Board = (props: BoardProps) => {
+  const [configuration, setConfiguration] = useState<GridConfiguration>(
+    props.configuration
+  );
   const [selectedTile, setSelectedTile] = useState<GridPosition | null>(null);
+
+  useEffect(() => {
+    setConfiguration(() => props.configuration);
+  }, [props.configuration]);
 
   return (
     <div
       style={{
-        gridTemplateColumns: `repeat(${props.sizeX}, 1fr)`,
-        gridTemplateRows: `repeat(${props.sizeY}, 1fr)`,
+        gridTemplateColumns: `repeat(${props.configuration[0].length}, 1fr)`,
+        gridTemplateRows: `repeat(${props.configuration.length}, 1fr)`,
       }}
       className={`flex-1 gap-0.5 grid max-w-lg aspect-square`}
       role="grid"
     >
-      {Array.from({ length: props.sizeY }, (_, kr) =>
-        Array.from({ length: props.sizeX }, (_, kc) => (
+      {configuration.map((row, y) =>
+        row.map((val, x) => (
           <Tile
-            posX={kc}
-            posY={kr}
+            posX={x}
+            posY={y}
+            value={val}
             selected={
               (selectedTile || false) &&
-              selectedTile.column === kc &&
-              selectedTile.row === kr
+              selectedTile.column === x &&
+              selectedTile.row === y
             }
             setSelectedTile={setSelectedTile}
-            key={kr * kc + kc}
+            key={x * y + x}
           />
         ))
       )}
