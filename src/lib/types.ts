@@ -3,25 +3,23 @@ export interface GridPosition {
   column: number;
 }
 
-export interface GameBoard {
-  size_x: number;
-  size_y: number;
-  obstacles: Movable[];
-}
-
 export type GridConfiguration = Array<Array<number>>;
 
+/** @deprecated */
 export interface Movable {
   x: number;
   y: number;
 }
 
 export interface GameLevel {
-  // Concatenated string of each board row
+  // Starting configuration of the game board
   startingConfiguration: GridConfiguration;
 
+  // Custom goal position. Will default the middle of the board
+  goal?: Array<GridPosition>;
+
   // Difficulty of the level
-  difficulty: 1 | 2 | 3 | 4 | 5;
+  difficulty?: 1 | 2 | 3 | 4 | 5;
 
   // Name of the level
   name?: string;

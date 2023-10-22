@@ -1,6 +1,7 @@
 import { GridConfiguration, GridPosition } from "@/lib/types";
 import { useEffect, useState } from "react";
 import Tile from "./Tile";
+import { getDestinationTiles } from "@/utils/boardActions";
 
 interface BoardProps {
   configuration: GridConfiguration;
@@ -11,10 +12,21 @@ const Board = (props: BoardProps) => {
     props.configuration
   );
   const [selectedTile, setSelectedTile] = useState<GridPosition | null>(null);
+  const [moveDestinations, setMoveDestinations] = useState<Array<GridPosition>>(
+    []
+  );
 
   useEffect(() => {
     setConfiguration(() => props.configuration);
   }, [props.configuration]);
+
+  useEffect(() => {
+    if (selectedTile) {
+      setMoveDestinations(() =>
+        getDestinationTiles(props.configuration, selectedTile)
+      );
+    }
+  }, [props.configuration, selectedTile]);
 
   return (
     <div
@@ -22,7 +34,7 @@ const Board = (props: BoardProps) => {
         gridTemplateColumns: `repeat(${props.configuration[0].length}, 1fr)`,
         gridTemplateRows: `repeat(${props.configuration.length}, 1fr)`,
       }}
-      className={`flex-1 gap-0.5 grid max-w-lg aspect-square`}
+      className={`gap-1 grid aspect-square`}
       role="grid"
     >
       {configuration.map((row, y) =>
@@ -36,6 +48,7 @@ const Board = (props: BoardProps) => {
               selectedTile.column === x &&
               selectedTile.row === y
             }
+            moveDestinations={moveDestinations}
             setSelectedTile={setSelectedTile}
             key={x * y + x}
           />
