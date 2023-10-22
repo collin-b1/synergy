@@ -1,23 +1,28 @@
 import { GridConfiguration, GridPosition } from "@/lib/types";
 import { useEffect, useState } from "react";
 import Tile from "./Tile";
-import { getDestinationTiles } from "@/utils/boardActions";
+import { getDestinationTiles, moveTile } from "@/utils/boardActions";
 
 interface BoardProps {
   configuration: GridConfiguration;
+  setConfiguration: React.Dispatch<React.SetStateAction<GridConfiguration>>;
+  goal?: GridPosition;
 }
 
 const Board = (props: BoardProps) => {
-  const [configuration, setConfiguration] = useState<GridConfiguration>(
-    props.configuration
-  );
   const [selectedTile, setSelectedTile] = useState<GridPosition | null>(null);
   const [moveDestinations, setMoveDestinations] = useState<Array<GridPosition>>(
     []
   );
 
+  const handleMoveSelectedTile = (destination: GridPosition) => {
+    if (selectedTile) {
+      moveTile(props.configuration, selectedTile, destination);
+    }
+  };
+
   useEffect(() => {
-    setConfiguration(() => props.configuration);
+    setSelectedTile(() => null);
   }, [props.configuration]);
 
   useEffect(() => {
@@ -25,6 +30,8 @@ const Board = (props: BoardProps) => {
       setMoveDestinations(() =>
         getDestinationTiles(props.configuration, selectedTile)
       );
+    } else {
+      setMoveDestinations(() => []);
     }
   }, [props.configuration, selectedTile]);
 
@@ -37,18 +44,24 @@ const Board = (props: BoardProps) => {
       className={`gap-1 grid aspect-square`}
       role="grid"
     >
-      {configuration.map((row, y) =>
+      {props.configuration.map((row, y) =>
         row.map((val, x) => (
           <Tile
             posX={x}
             posY={y}
             value={val}
+            isGoal={
+              props.goal
+                ? props.goal.column === x && props.goal.row === y
+                : false
+            }
             selected={
               (selectedTile || false) &&
               selectedTile.column === x &&
               selectedTile.row === y
             }
             moveDestinations={moveDestinations}
+            handleMoveSelectedTile={handleMoveSelectedTile}
             setSelectedTile={setSelectedTile}
             key={x * y + x}
           />

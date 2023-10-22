@@ -1,5 +1,5 @@
 import Game from "./Game/Game";
-//import LevelEditor from "./components/LevelEditor/LevelEditor";
+import Link from "./Link";
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       </main>
       <footer className="mt-4 p-4 max-w-md mx-auto">
         <h2 className="text-center font-bold">How to Play</h2>
-        <ul className="list-disc">
+        <ul className="list-disc mb-4">
           <li>
             The goal is to move the{" "}
             <span className="text-red-500">player </span>
@@ -20,6 +20,17 @@ function App() {
             obstacle
           </li>
           <li>Objects can be moved in the same way as the player</li>
+        </ul>
+        <ul className="flex text-center">
+          <li className="flex-1">
+            <Link
+              href="https://github.com/collin-b1/synergy"
+              text="Level Editor"
+            />
+          </li>
+          <li className="flex-1">
+            <Link href="https://github.com/collin-b1/synergy" text="Source" />
+          </li>
         </ul>
       </footer>
     </>
