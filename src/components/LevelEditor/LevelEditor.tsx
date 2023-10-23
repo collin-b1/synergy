@@ -88,8 +88,8 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto flex flex-col">
-      <div className="flex-1">
+    <div className="flex-1 flex flex-col justify-center max-w-lg mx-auto p-2">
+      <div className="mb-4">
         <Board
           configuration={levelProperties.startingConfiguration}
           selectedTile={selectedTile}
@@ -98,35 +98,35 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
         />
       </div>
 
-      <div className="max-w-md flex flex-col mt-4">
+      <div className="flex-1 flex flex-col mt-4">
         <h2 className="text-xl font-bold">Board Actions</h2>
-        <div className="flex-1 flex">
+        <div className="flex flex-col sm:flex-row">
           <Button
-            className="mr-1"
+            className="mt-1 mr-0 sm:mr-1 sm:mt-0"
             onClick={() => selectedTile && insertTile(selectedTile, 3)}
           >
             Player
           </Button>
           <Button
-            className="mr-1"
+            className="mt-1 mr-0 sm:mr-1 sm:mt-0"
             onClick={() => selectedTile && insertTile(selectedTile, 2)}
           >
             Obstacle
           </Button>
           <Button
-            className="mr-1"
+            className="mt-1 mr-0 sm:mr-1 sm:mt-0"
             onClick={() => selectedTile && insertTile(selectedTile, 4)}
           >
             Sticky
           </Button>
           <Button
-            className="mr-1"
+            className="mt-1 mr-0 sm:mr-1 sm:mt-0"
             onClick={() => selectedTile && setGoal(selectedTile)}
           >
             Goal
           </Button>
           <Button
-            className="mr-1"
+            className="mt-1 mr-0 sm:mr-1 sm:mt-0"
             onClick={() => selectedTile && insertTile(selectedTile, 0)}
           >
             Delete
@@ -134,14 +134,14 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
         </div>
 
         <h2 className="text-xl font-bold mt-4">Level Properties</h2>
-        <div className="flex">
+        <div className="flex flex-col sm:flex-row">
           <div className="flex-1 flex flex-col p-2">
             <label htmlFor="levelName">Level Name</label>
             <input
               type="text"
               name="levelName"
               value={levelProperties.name}
-              onChange={() => handleChangeName}
+              onChange={handleChangeName}
               className="p-1 rounded border-b"
             />
           </div>
@@ -151,13 +151,13 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
               type="text"
               name="levelAuthor"
               value={levelProperties.author}
-              onChange={() => handleChangeAuthor}
+              onChange={handleChangeAuthor}
               className="p-1 rounded border-b"
             />
           </div>
         </div>
 
-        <div className="flex">
+        <div className="flex flex-col sm:flex-row">
           <div className="flex-1 flex flex-col p-2">
             <label htmlFor="sizeX" className="flex-1">
               Columns
@@ -168,7 +168,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
               min={3}
               max={9}
               value={sizeX}
-              onChange={() => handleChangeSizeX}
+              onChange={handleChangeSizeX}
               className="p-1 rounded border-b"
             />
           </div>
@@ -180,7 +180,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
               min={3}
               max={9}
               value={sizeY}
-              onChange={() => handleChangeSizeY}
+              onChange={handleChangeSizeY}
               className="p-1 rounded border-b"
             />
           </div>
