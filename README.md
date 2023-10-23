@@ -10,21 +10,27 @@ Obstacles may be placed on top of the portal tile, but will not count as complet
 
 ## Development
 
-### 1. Clone the repository
+### Getting started
+
+1. Clone the repository
 
 ```
 $ git clone https://github.com/collin-b1/synergy.git
 $ cd synergy
 ```
 
-### 2. Install dependencies
+2. Install dependencies
 
 ```
 $ npm install
 ```
 
-### 3. Run developer environment
+3. Run developer environment
 
 ```
 $ npm run dev
 ```
+
+### Adding new levels
+
+To add a new level to the base game, "Export" the level from the editor and add it to the levels array in `src/api/index.ts` (this is subject to change).
