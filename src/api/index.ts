@@ -1,7 +1,7 @@
 import { GameLevel } from "@/lib/types";
 
 const levels: Array<GameLevel> = [
-  Object.freeze({
+  {
     startingConfiguration: [
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 2],
@@ -13,8 +13,8 @@ const levels: Array<GameLevel> = [
     author: "collin-b1",
     difficulty: 1,
     name: "Tutorial - Moving Player",
-  }),
-  Object.freeze({
+  },
+  {
     startingConfiguration: [
       [0, 0, 0, 0, 0],
       [0, 2, 0, 0, 0],
@@ -26,8 +26,8 @@ const levels: Array<GameLevel> = [
     author: "collin-b1",
     difficulty: 1,
     name: "Tutorial - Moving Objects",
-  }),
-  Object.freeze({
+  },
+  {
     startingConfiguration: [
       [0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 3, 0],
@@ -40,20 +40,20 @@ const levels: Array<GameLevel> = [
     author: "collin-b1",
     name: "Tutorial - Sticky Zones",
     goal: { column: 3, row: 3 },
-  }),
-  Object.freeze({
+  },
+  {
     startingConfiguration: [
-      [2, 4, 4, 0, 4, 4, 2],
-      [4, 0, 0, 0, 0, 0, 4],
-      [0, 4, 4, 0, 4, 4, 0],
-      [0, 0, 0, 0, 0, 0, 0],
-      [4, 3, 0, 4, 0, 0, 4],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 2, 0],
+      [0, 2, 0, 0, 2],
+      [0, 0, 0, 0, 0],
+      [2, 0, 0, 0, 3],
     ],
-    author: "collin-b1",
-    name: "Fountain",
-    goal: { column: 3, row: 2 },
-  }),
-  Object.freeze({
+    author: "Brian",
+    name: "Untitled",
+    goal: { row: 2, column: 2 },
+  },
+  {
     startingConfiguration: [
       [0, 0, 3, 0, 0],
       [0, 0, 2, 0, 0],
@@ -64,7 +64,33 @@ const levels: Array<GameLevel> = [
     author: "Lunar Lockout",
     name: "21",
     goal: { column: 2, row: 2 },
-  }),
+  },
+  {
+    startingConfiguration: [
+      [2, 4, 4, 0, 4, 4, 2],
+      [4, 0, 0, 0, 0, 0, 4],
+      [0, 4, 4, 0, 4, 4, 0],
+      [0, 0, 0, 0, 0, 0, 0],
+      [4, 3, 0, 4, 0, 0, 4],
+    ],
+    author: "collin-b1",
+    name: "Fountain",
+    goal: { column: 3, row: 2 },
+  },
+  {
+    startingConfiguration: [
+      [0, 4, 2, 4, 0, 4, 0, 4, 0],
+      [0, 4, 0, 0, 4, 0, 4, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 2, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 4, 0, 4, 0, 0, 4, 0, 0],
+      [4, 2, 4, 0, 4, 0, 4, 3, 4],
+    ],
+    author: "collin-b1",
+    name: "Cavern",
+    goal: { column: 4, row: 3 },
+  },
 ];
 
 const getLevelCount = (): number => {
@@ -72,7 +98,7 @@ const getLevelCount = (): number => {
 };
 
 const getLevel = (levelNumber: number): GameLevel => {
-  return levels[levelNumber] || {};
+  return Object.freeze(levels[levelNumber]) || {};
 };
 
 export { getLevel, getLevelCount };
