@@ -32,14 +32,14 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
         setLevelProperties(() => level);
       }
     }
-  }, [props, props.code]);
+  }, [props]);
 
   useEffect(() => {
-    setLevelProperties({
+    setLevelProperties(levelProperties => ({
       ...levelProperties,
       startingConfiguration: createEmptyConfiguration(sizeX, sizeY),
-    });
-  }, [levelProperties, sizeX, sizeY]);
+    }));
+  }, [sizeX, sizeY]);
 
   const validateValue = (val: number) => val <= 9 && val >= 3;
 
@@ -72,19 +72,19 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
   };
 
   const setGoal = (tile: GridPosition | null) => {
-    setLevelProperties({
+    setLevelProperties(levelProperties => ({
       ...levelProperties,
       goal: tile,
-    });
+    }));
   };
 
   const insertTile = (tile: GridPosition, tileType: number) => {
     const newConfig = [...levelProperties.startingConfiguration];
     newConfig[tile.row][tile.column] = tileType;
-    setLevelProperties({
+    setLevelProperties(levelProperties => ({
       ...levelProperties,
       startingConfiguration: [...newConfig],
-    });
+    }));
   };
 
   return (
@@ -141,7 +141,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
               type="text"
               name="levelName"
               value={levelProperties.name}
-              onChange={handleChangeName}
+              onChange={() => handleChangeName}
               className="p-1 rounded border-b"
             />
           </div>
@@ -151,7 +151,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
               type="text"
               name="levelAuthor"
               value={levelProperties.author}
-              onChange={handleChangeAuthor}
+              onChange={() => handleChangeAuthor}
               className="p-1 rounded border-b"
             />
           </div>
@@ -168,7 +168,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
               min={3}
               max={9}
               value={sizeX}
-              onChange={handleChangeSizeX}
+              onChange={() => handleChangeSizeX}
               className="p-1 rounded border-b"
             />
           </div>
@@ -180,7 +180,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
               min={3}
               max={9}
               value={sizeY}
-              onChange={handleChangeSizeY}
+              onChange={() => handleChangeSizeY}
               className="p-1 rounded border-b"
             />
           </div>
