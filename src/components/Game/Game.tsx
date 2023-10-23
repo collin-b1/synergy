@@ -77,7 +77,7 @@ const Game: React.FC<GameProps> = props => {
         <div className="flex-1 text-center mb-4 flex items-center">
           <div className="flex-1">
             <h2 className="font-bold text-lg">{levelProperties.name}</h2>
-            <h3>by {levelProperties.author}</h3>
+            <h3 className="overflow-ellipsis">by {levelProperties.author}</h3>
           </div>
         </div>
         <div className="mb-4">

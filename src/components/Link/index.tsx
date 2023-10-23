@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 
 export interface LinkProps {
   href: string;
-  text: string;
+  text?: string;
 }
 
 export const Button: React.FC<LinkProps> = props => {
@@ -15,7 +15,7 @@ export const Button: React.FC<LinkProps> = props => {
         clsx("text-blue-500", "hover:underline", "active:text-blue-800")
       )}
     >
-      {props.text}
+      {props.text || props.href}
     </Link>
   );
 };

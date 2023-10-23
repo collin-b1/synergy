@@ -24,6 +24,13 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
     goal: { row: 2, column: 2 },
   });
 
+  const [shareLink, setShareLink] = useState<string>("");
+
+  useEffect(() => {
+    const code = encodeLevelString(levelProperties);
+    setShareLink(`${window.location.href.split("editor")[0]}?code=${code}`);
+  }, [levelProperties]);
+
   useEffect(() => {
     const { code } = props;
     if (code !== undefined) {
@@ -89,7 +96,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
 
   return (
     <div className="flex-1 flex flex-col justify-center max-w-lg mx-auto p-2">
-      <div className="mb-4">
+      <div className="mb-2">
         <Board
           configuration={levelProperties.startingConfiguration}
           selectedTile={selectedTile}
@@ -98,7 +105,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
         />
       </div>
 
-      <div className="flex-1 flex flex-col mt-4">
+      <div className="flex-1 flex flex-col mt-2">
         <h2 className="text-xl font-bold">Board Actions</h2>
         <div className="flex flex-col sm:flex-row">
           <Button
@@ -132,6 +139,25 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
             Delete
           </Button>
         </div>
+        <div className="flex-1 flex mt-2">
+          <Button
+            className="bg-blue-400 mr-1"
+            onClick={() => window.alert(JSON.stringify(levelProperties))}
+          >
+            Export
+          </Button>
+          <Button
+            className="bg-red-400 mr-1"
+            onClick={() =>
+              setLevelProperties({
+                ...levelProperties,
+                startingConfiguration: createEmptyConfiguration(sizeX, sizeY),
+              })
+            }
+          >
+            Reset
+          </Button>
+        </div>
 
         <h2 className="text-xl font-bold mt-4">Level Properties</h2>
         <div className="flex flex-col sm:flex-row">
@@ -140,6 +166,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
             <input
               type="text"
               name="levelName"
+              maxLength={20}
               value={levelProperties.name}
               onChange={handleChangeName}
               className="p-1 rounded border-b"
@@ -150,6 +177,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
             <input
               type="text"
               name="levelAuthor"
+              maxLength={20}
               value={levelProperties.author}
               onChange={handleChangeAuthor}
               className="p-1 rounded border-b"
@@ -185,38 +213,8 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
             />
           </div>
         </div>
-        <h2 className="text-xl font-bold mt-4">Actions</h2>
-        <div className="flex-1 flex">
-          <Button
-            className="bg-blue-400 mr-1"
-            onClick={() =>
-              window.alert(
-                `${
-                  window.location.href.split("/editor")[0]
-                }/?code=${encodeLevelString(levelProperties)}`
-              )
-            }
-          >
-            Share
-          </Button>
-          <Button
-            className="bg-blue-400 mr-1"
-            onClick={() => window.alert(JSON.stringify(levelProperties))}
-          >
-            Export
-          </Button>
-          <Button
-            className="bg-red-400 mr-1"
-            onClick={() =>
-              setLevelProperties({
-                ...levelProperties,
-                startingConfiguration: createEmptyConfiguration(sizeX, sizeY),
-              })
-            }
-          >
-            Reset
-          </Button>
-        </div>
+        <h2 className="text-xl font-bold mt-4">Share</h2>
+        <input value={shareLink} className="mt-2 p-1 rounded border-b" />
       </div>
     </div>
   );
