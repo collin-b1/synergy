@@ -1,4 +1,4 @@
-import { GridConfiguration, GridPosition } from "@/lib/types";
+import { GameLevel, GridConfiguration, GridPosition } from "@/lib/types";
 
 /**
  * Returns an x by y matrix filled with zeros.
@@ -42,41 +42,49 @@ export const getDestinationTiles = (
   const destinations: Array<GridPosition> = [];
 
   // West
-  for (let i = tilePos.column - 1; i >= 1; i--) {
+  for (let i = tilePos.column; i >= 1; i--) {
     const current = board[tilePos.row][i];
     const check = board[tilePos.row][i - 1];
-    if (!isBarrier(current) && isBarrier(check)) {
-      destinations.push({ row: tilePos.row, column: i });
+    if (isBarrier(check)) {
+      if (!isBarrier(current)) {
+        destinations.push({ row: tilePos.row, column: i });
+      }
       if (check !== 4) break;
     }
   }
 
   // East
-  for (let i = tilePos.column + 1; i < boardSizeX - 1; i++) {
+  for (let i = tilePos.column; i < boardSizeX - 1; i++) {
     const current = board[tilePos.row][i];
     const check = board[tilePos.row][i + 1];
-    if (!isBarrier(current) && isBarrier(check)) {
-      destinations.push({ row: tilePos.row, column: i });
+    if (isBarrier(check)) {
+      if (!isBarrier(current)) {
+        destinations.push({ row: tilePos.row, column: i });
+      }
       if (check !== 4) break;
     }
   }
 
   // South
-  for (let i = tilePos.row - 1; i >= 1; i--) {
+  for (let i = tilePos.row; i >= 1; i--) {
     const current = board[i][tilePos.column];
     const check = board[i - 1][tilePos.column];
-    if (!isBarrier(current) && isBarrier(check)) {
-      destinations.push({ row: i, column: tilePos.column });
+    if (isBarrier(check)) {
+      if (!isBarrier(current)) {
+        destinations.push({ row: i, column: tilePos.column });
+      }
       if (check !== 4) break;
     }
   }
 
   // North
-  for (let i = tilePos.row + 1; i < boardSizeY - 1; i++) {
+  for (let i = tilePos.row; i < boardSizeY - 1; i++) {
     const current = board[i][tilePos.column];
     const check = board[i + 1][tilePos.column];
-    if (!isBarrier(current) && isBarrier(check)) {
-      destinations.push({ row: i, column: tilePos.column });
+    if (isBarrier(check)) {
+      if (!isBarrier(current)) {
+        destinations.push({ row: i, column: tilePos.column });
+      }
       if (check !== 4) break;
     }
   }
@@ -89,7 +97,6 @@ export const moveTile = (
   tile: GridPosition,
   destination: GridPosition
 ): boolean => {
-  console.log("Checking...");
   const checkDestinationTiles =
     getDestinationTiles(board, tile).filter(
       pos => pos.row === destination.row && pos.column === destination.column
@@ -101,4 +108,23 @@ export const moveTile = (
     return true;
   }
   return false;
+};
+
+export const encodeLevelString = (level: GameLevel): string | undefined => {
+  try {
+    const str = JSON.stringify(level);
+    return btoa(str);
+  } catch (e) {
+    return undefined;
+  }
+};
+
+export const decodeLevelString = (code: string): GameLevel | undefined => {
+  try {
+    const decoded = atob(code);
+    const level: GameLevel = JSON.parse(decoded);
+    return level;
+  } catch (e) {
+    return undefined;
+  }
 };

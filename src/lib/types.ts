@@ -16,7 +16,7 @@ export interface GameLevel {
   startingConfiguration: GridConfiguration;
 
   // Custom goal position. Will default the middle of the board
-  goal?: GridPosition;
+  goal?: GridPosition | null;
 
   // Difficulty of the level
   difficulty?: 1 | 2 | 3 | 4 | 5;
@@ -26,4 +26,8 @@ export interface GameLevel {
 
   // Author of the level
   author?: string;
+}
+
+export interface LevelQueryParameters {
+  code: string;
 }

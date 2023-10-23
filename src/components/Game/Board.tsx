@@ -5,35 +5,35 @@ import { getDestinationTiles, moveTile } from "@/utils/boardActions";
 
 interface BoardProps {
   configuration: GridConfiguration;
-  setConfiguration: React.Dispatch<React.SetStateAction<GridConfiguration>>;
-  goal?: GridPosition;
+  selectedTile: GridPosition | null;
+  setSelectedTile: React.Dispatch<React.SetStateAction<GridPosition | null>>;
+  goal: GridPosition | null;
 }
 
 const Board = (props: BoardProps) => {
-  const [selectedTile, setSelectedTile] = useState<GridPosition | null>(null);
   const [moveDestinations, setMoveDestinations] = useState<Array<GridPosition>>(
     []
   );
 
   const handleMoveSelectedTile = (destination: GridPosition) => {
-    if (selectedTile) {
-      moveTile(props.configuration, selectedTile, destination);
+    if (props.selectedTile) {
+      moveTile(props.configuration, props.selectedTile, destination);
+      if (
+        props.goal &&
+        props.configuration[props.goal.row][props.goal.column] === 3
+      ) {
+        window.alert("You win!\n(More satisfying win alert coming soon...)");
+      }
     }
   };
 
   useEffect(() => {
-    setSelectedTile(() => null);
-  }, [props.configuration]);
-
-  useEffect(() => {
-    if (selectedTile) {
-      setMoveDestinations(() =>
-        getDestinationTiles(props.configuration, selectedTile)
-      );
-    } else {
-      setMoveDestinations(() => []);
-    }
-  }, [props.configuration, selectedTile]);
+    setMoveDestinations(() =>
+      props.selectedTile
+        ? getDestinationTiles(props.configuration, props.selectedTile)
+        : []
+    );
+  }, [props.configuration, props.selectedTile]);
 
   return (
     <div
@@ -41,7 +41,7 @@ const Board = (props: BoardProps) => {
         gridTemplateColumns: `repeat(${props.configuration[0].length}, 1fr)`,
         gridTemplateRows: `repeat(${props.configuration.length}, 1fr)`,
       }}
-      className={`gap-1 grid aspect-square`}
+      className={`gap-1 grid`}
       role="grid"
     >
       {props.configuration.map((row, y) =>
@@ -56,13 +56,13 @@ const Board = (props: BoardProps) => {
                 : false
             }
             selected={
-              (selectedTile || false) &&
-              selectedTile.column === x &&
-              selectedTile.row === y
+              (props.selectedTile || false) &&
+              props.selectedTile.column === x &&
+              props.selectedTile.row === y
             }
             moveDestinations={moveDestinations}
             handleMoveSelectedTile={handleMoveSelectedTile}
-            setSelectedTile={setSelectedTile}
+            setSelectedTile={props.setSelectedTile}
             key={x * y + x}
           />
         ))

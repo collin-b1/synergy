@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
-import { getLevel } from "@/api";
+import { getLevel, getLevelCount } from "@/api";
 import Board from "./Board";
-import { GameLevel, GridConfiguration } from "@/lib/types";
-import { createEmptyConfiguration } from "@/utils/boardActions";
+import { GameLevel, GridConfiguration, GridPosition } from "@/lib/types";
+import {
+  createEmptyConfiguration,
+  decodeLevelString,
+} from "@/utils/boardActions";
 import Button from "../Button";
 
-const Game: React.FC = () => {
+interface GameProps {
+  code: string | undefined;
+}
+
+const Game: React.FC<GameProps> = props => {
   const [levelNumber, setLevelNumber] = useState<number>(0);
+  const [levelCount, setLevelCount] = useState<number>(0);
   const [attempts, setAttempts] = useState<number>(0);
 
   // These properties do not change except for per level
@@ -22,10 +30,29 @@ const Game: React.FC = () => {
     structuredClone(levelProperties.startingConfiguration)
   );
 
+  const [selectedTile, setSelectedTile] = useState<GridPosition | null>(null);
+  const [isUserLevel, setIsUserLevel] = useState<boolean>(false);
+
   useEffect(() => {
-    setLevelProperties(() => getLevel(levelNumber));
+    setLevelCount(() => getLevelCount());
+  }, []);
+
+  useEffect(() => {
+    const { code } = props;
+    if (code === undefined) {
+      setIsUserLevel(false);
+      setLevelProperties(() => getLevel(levelNumber));
+    } else {
+      const level: GameLevel | undefined = decodeLevelString(code);
+      if (level !== undefined) {
+        setIsUserLevel(true);
+        setLevelProperties(() => level);
+      }
+    }
+
+    setSelectedTile(() => null);
     setAttempts(0);
-  }, [levelNumber]);
+  }, [levelNumber, props, props.code]);
 
   useEffect(() => {
     setConfiguration(structuredClone(levelProperties.startingConfiguration));
@@ -46,34 +73,41 @@ const Game: React.FC = () => {
 
   return (
     <>
-      <div className="flex-1 flex flex-col justify-center">
-        <header className="flex-1 text-center mb-4 flex items-center">
+      <div className="flex-1 flex flex-col justify-center max-w-lg mx-auto p-2">
+        <div className="flex-1 text-center mb-4 flex items-center">
           <div className="flex-1">
             <h2 className="font-bold text-lg">{levelProperties.name}</h2>
             <h3>by {levelProperties.author}</h3>
           </div>
-        </header>
-        <main className="mb-4">
+        </div>
+        <div className="mb-4">
           <Board
             configuration={configuration}
-            setConfiguration={setConfiguration}
-            goal={levelProperties.goal}
+            goal={levelProperties.goal || null}
+            selectedTile={selectedTile}
+            setSelectedTile={setSelectedTile}
             key={attempts}
           />
-        </main>
-        <footer className="flex-1 flex items-center">
-          <Button onClick={handlePreviousLevel} disabled={levelNumber === 0}>
-            ◄
+        </div>
+        <div className="flex-1 flex items-center">
+          <Button
+            onClick={handlePreviousLevel}
+            disabled={levelNumber === 0 || isUserLevel}
+          >
+            ◁
           </Button>
           <div className="flex-1 flex justify-center">
-            <Button onClick={handleRestartLevel} className="flex-1">
+            <Button onClick={handleRestartLevel}>
               Restart Level {attempts > 0 ? `(${attempts})` : ""}
             </Button>
           </div>
-          <Button onClick={handleNextLevel} disabled={levelNumber === 2}>
-            ►
+          <Button
+            onClick={handleNextLevel}
+            disabled={levelNumber === levelCount - 1 || isUserLevel}
+          >
+            ▷
           </Button>
-        </footer>
+        </div>
       </div>
     </>
   );
