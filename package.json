@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://collin-b1.github.io/synergy/",
+  "homepage": "https://collin-b1.github.io/",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
