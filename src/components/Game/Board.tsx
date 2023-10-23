@@ -17,12 +17,21 @@ const Board = (props: BoardProps) => {
 
   const handleMoveSelectedTile = (destination: GridPosition) => {
     if (props.selectedTile) {
-      moveTile(props.configuration, props.selectedTile, destination);
+      const moved = moveTile(
+        props.configuration,
+        props.selectedTile,
+        destination
+      );
       if (
-        props.goal &&
-        props.configuration[props.goal.row][props.goal.column] === 3
+        moved.column === destination.column &&
+        moved.row === destination.row
       ) {
-        window.alert("You win!\n(More satisfying win alert coming soon...)");
+        if (
+          props.goal &&
+          props.configuration[props.goal.row][props.goal.column] === 3
+        ) {
+          window.alert("You win!\n(More satisfying win alert coming soon...)");
+        }
       }
     }
   };

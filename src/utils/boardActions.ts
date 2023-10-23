@@ -96,7 +96,7 @@ export const moveTile = (
   board: GridConfiguration,
   tile: GridPosition,
   destination: GridPosition
-): boolean => {
+): GridPosition => {
   const checkDestinationTiles =
     getDestinationTiles(board, tile).filter(
       pos => pos.row === destination.row && pos.column === destination.column
@@ -105,9 +105,9 @@ export const moveTile = (
   if (checkDestinationTiles) {
     board[destination.row][destination.column] = board[tile.row][tile.column];
     board[tile.row][tile.column] = 0;
-    return true;
+    return destination;
   }
-  return false;
+  return tile;
 };
 
 export const encodeLevelString = (level: GameLevel): string | undefined => {

@@ -52,7 +52,7 @@ const Tile = (props: TileProps) => {
     <div
       className={twMerge(
         clsx(
-          "aspect-square rounded hover:border-4 active:border-4 transition-[border] ease-linear delay-0",
+          "aspect-square rounded hover:border-4 active:border-4 transition-[border] ease-linear delay-0 motion-reduce:transition-none",
           tileColors[props.value],
           {
             "border-4 border-blue-500": props.selected,
