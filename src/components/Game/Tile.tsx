@@ -2,6 +2,8 @@ import { GridPosition } from "@/lib/types";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
 import { useEffect, useState } from "react";
+import { TileColors } from "@/lib/constants";
+import { Tile as TileValue } from "@/lib/types";
 
 interface TileProps {
   posX: number;
@@ -13,14 +15,6 @@ interface TileProps {
   handleMoveSelectedTile: (destination: GridPosition) => void;
   setSelectedTile: React.Dispatch<React.SetStateAction<GridPosition | null>>;
 }
-
-const tileColors = [
-  "bg-gray-300",
-  "bg-gray-400",
-  "bg-gray-600",
-  "bg-red-400",
-  "bg-green-400",
-];
 
 const Tile = (props: TileProps) => {
   const [isDestination, setIsDestination] = useState<boolean>(false);
@@ -49,15 +43,16 @@ const Tile = (props: TileProps) => {
   };
 
   return (
-    <div
+    <button
       className={twMerge(
         clsx(
           "aspect-square rounded hover:border-4 active:border-4 transition-[border] ease-linear delay-0 motion-reduce:transition-none",
-          tileColors[props.value],
+          TileColors.get(props.value),
           {
             "border-4 border-blue-500": props.selected,
             "flex justify-center items-center": isDestination,
-            "bg-portal bg-cover ": props.isGoal && props.value === 0,
+            "bg-portal bg-cover ":
+              props.isGoal && props.value === TileValue.EMPTY,
           }
         )
       )}
@@ -69,7 +64,7 @@ const Tile = (props: TileProps) => {
       ) : (
         <></>
       )}
-    </div>
+    </button>
   );
 };
 

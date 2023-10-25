@@ -5,11 +5,15 @@ export interface GridPosition {
 
 export type GridConfiguration = Array<Array<number>>;
 
-/** @deprecated */
-export interface Movable {
-  x: number;
-  y: number;
+export enum Tile {
+  EMPTY = 0,
+  WALL = 1, // Immovable object
+  OBSTACLE = 2, // Movable object
+  PLAYER = 3,
+  STICKY = 4,
 }
+
+export type TileSet = Array<Tile>;
 
 export interface GameLevel {
   // Starting configuration of the game board

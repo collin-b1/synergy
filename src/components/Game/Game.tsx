@@ -7,6 +7,7 @@ import {
   decodeLevelString,
 } from "@/utils/boardActions";
 import Button from "../Button";
+import { LEVEL } from "@/lib/constants";
 
 interface GameProps {
   code: string | undefined;
@@ -19,10 +20,12 @@ const Game: React.FC<GameProps> = props => {
 
   // These properties do not change except for per level
   const [levelProperties, setLevelProperties] = useState<GameLevel>({
-    difficulty: 1,
-    startingConfiguration: createEmptyConfiguration(5, 5),
-    author: "Anonymous",
-    name: "Unnamed Level",
+    startingConfiguration: createEmptyConfiguration(
+      LEVEL.DEFAULT_ROWS,
+      LEVEL.DEFAULT_COLUMNS
+    ),
+    author: LEVEL.DEFAULT_AUTHOR,
+    name: LEVEL.DEFAULT_NAME,
   });
 
   // This is the board state that gets changed

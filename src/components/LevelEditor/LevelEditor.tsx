@@ -7,6 +7,7 @@ import {
 } from "@/utils/boardActions";
 import { GameLevel, GridPosition } from "@/lib/types";
 import Button from "../Button";
+import { LEVEL } from "@/lib/constants";
 
 interface LevelEditorProps {
   code: string | undefined;
@@ -14,14 +15,17 @@ interface LevelEditorProps {
 
 const LevelEditor: React.FC<LevelEditorProps> = props => {
   // Level Details
-  const [sizeX, setSizeX] = useState<number>(5);
-  const [sizeY, setSizeY] = useState<number>(5);
+  const [rows, setRows] = useState<number>(LEVEL.DEFAULT_ROWS);
+  const [columns, setColumns] = useState<number>(LEVEL.DEFAULT_COLUMNS);
   const [selectedTile, setSelectedTile] = useState<GridPosition | null>(null);
   const [levelProperties, setLevelProperties] = useState<GameLevel>({
-    startingConfiguration: createEmptyConfiguration(sizeX, sizeY),
-    author: "Anonymous",
-    name: "Untitled",
-    goal: { row: 2, column: 2 },
+    startingConfiguration: createEmptyConfiguration(rows, columns),
+    author: LEVEL.DEFAULT_AUTHOR,
+    name: LEVEL.DEFAULT_NAME,
+    goal: {
+      row: LEVEL.DEFAULT_GOAL_ROW,
+      column: LEVEL.DEFAULT_GOAL_COLUMN,
+    },
   });
 
   const [shareLink, setShareLink] = useState<string>("");
@@ -44,23 +48,21 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
   useEffect(() => {
     setLevelProperties(levelProperties => ({
       ...levelProperties,
-      startingConfiguration: createEmptyConfiguration(sizeX, sizeY),
+      startingConfiguration: createEmptyConfiguration(columns, rows),
     }));
-  }, [sizeX, sizeY]);
+  }, [columns, rows]);
 
-  const validateValue = (val: number) => val <= 9 && val >= 3;
-
-  const handleChangeSizeX = (e: ChangeEvent<HTMLInputElement>) => {
-    const val = +e.target.value;
-    if (validateValue(val)) {
-      setSizeX(val);
+  const handleChangeColumns = (e: ChangeEvent<HTMLInputElement>) => {
+    const columns: number = parseInt(e.target.value);
+    if (columns >= LEVEL.MIN_COLUMNS && columns <= LEVEL.MAX_COLUMNS) {
+      setColumns(columns);
     }
   };
 
-  const handleChangeSizeY = (e: ChangeEvent<HTMLInputElement>) => {
-    const val = +e.target.value;
-    if (validateValue(val)) {
-      setSizeY(val);
+  const handleChangeRows = (e: ChangeEvent<HTMLInputElement>) => {
+    const rows: number = parseInt(e.target.value);
+    if (rows >= LEVEL.MIN_ROWS && rows <= LEVEL.MAX_ROWS) {
+      setRows(rows);
     }
   };
 
@@ -151,7 +153,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
             onClick={() =>
               setLevelProperties({
                 ...levelProperties,
-                startingConfiguration: createEmptyConfiguration(sizeX, sizeY),
+                startingConfiguration: createEmptyConfiguration(columns, rows),
               })
             }
           >
@@ -166,7 +168,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
             <input
               type="text"
               name="levelName"
-              maxLength={20}
+              maxLength={LEVEL.MAX_NAME_LENGTH}
               value={levelProperties.name}
               onChange={handleChangeName}
               className="p-1 rounded border-b"
@@ -177,7 +179,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
             <input
               type="text"
               name="levelAuthor"
-              maxLength={20}
+              maxLength={LEVEL.MAX_AUTHOR_LENGTH}
               value={levelProperties.author}
               onChange={handleChangeAuthor}
               className="p-1 rounded border-b"
@@ -187,34 +189,38 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
 
         <div className="flex flex-col sm:flex-row">
           <div className="flex-1 flex flex-col p-2">
-            <label htmlFor="sizeX" className="flex-1">
-              Columns
-            </label>
+            <label htmlFor="rows">Rows</label>
             <input
               type="number"
-              name="sizeX"
-              min={3}
-              max={9}
-              value={sizeX}
-              onChange={handleChangeSizeX}
+              name="rows"
+              min={LEVEL.MIN_ROWS}
+              max={LEVEL.MAX_ROWS}
+              value={rows}
+              onChange={handleChangeRows}
               className="p-1 rounded border-b"
             />
           </div>
           <div className="flex-1 flex flex-col p-2">
-            <label htmlFor="sizeY">Rows</label>
+            <label htmlFor="columns" className="flex-1">
+              Columns
+            </label>
             <input
               type="number"
-              name="sizeY"
-              min={3}
-              max={9}
-              value={sizeY}
-              onChange={handleChangeSizeY}
+              name="columns"
+              min={LEVEL.MIN_COLUMNS}
+              max={LEVEL.MAX_COLUMNS}
+              value={columns}
+              onChange={handleChangeColumns}
               className="p-1 rounded border-b"
             />
           </div>
         </div>
         <h2 className="text-xl font-bold mt-4">Share</h2>
-        <input value={shareLink} className="mt-2 p-1 rounded border-b" />
+        <input
+          value={shareLink}
+          onClick={e => e.currentTarget.select()}
+          className="mt-2 p-1 rounded border-b"
+        />
       </div>
     </div>
   );
