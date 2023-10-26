@@ -98,6 +98,9 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
 
   return (
     <div className="flex-1 flex flex-col justify-center max-w-lg mx-auto p-2">
+      <h1 className="text-white text-2xl font-bold text-center">
+        Level Editor
+      </h1>
       <div className="mb-2">
         <Board
           configuration={levelProperties.startingConfiguration}
@@ -108,7 +111,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
       </div>
 
       <div className="flex-1 flex flex-col mt-2">
-        <h2 className="text-xl font-bold">Board Actions</h2>
+        <h2 className="text-xl font-bold dark:text-white">Board Actions</h2>
         <div className="flex flex-col sm:flex-row">
           <Button
             className="mt-1 mr-0 sm:mr-1 sm:mt-0"
@@ -161,7 +164,9 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
           </Button>
         </div>
 
-        <h2 className="text-xl font-bold mt-4">Level Properties</h2>
+        <h2 className="text-xl font-bold mt-4 dark:text-white">
+          Level Properties
+        </h2>
         <div className="flex flex-col sm:flex-row">
           <div className="flex-1 flex flex-col p-2">
             <label htmlFor="levelName">Level Name</label>
@@ -171,7 +176,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
               maxLength={LEVEL.MAX_NAME_LENGTH}
               value={levelProperties.name}
               onChange={handleChangeName}
-              className="p-1 rounded border-b"
+              className="p-1 rounded border-b dark:bg-slate-800"
             />
           </div>
           <div className="flex-1 flex flex-col p-2">
@@ -182,7 +187,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
               maxLength={LEVEL.MAX_AUTHOR_LENGTH}
               value={levelProperties.author}
               onChange={handleChangeAuthor}
-              className="p-1 rounded border-b"
+              className="p-1 rounded border-b dark:bg-slate-800"
             />
           </div>
         </div>
@@ -197,7 +202,7 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
               max={LEVEL.MAX_ROWS}
               value={rows}
               onChange={handleChangeRows}
-              className="p-1 rounded border-b"
+              className="p-1 rounded border-b dark:bg-slate-800"
             />
           </div>
           <div className="flex-1 flex flex-col p-2">
@@ -211,15 +216,15 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
               max={LEVEL.MAX_COLUMNS}
               value={columns}
               onChange={handleChangeColumns}
-              className="p-1 rounded border-b"
+              className="p-1 rounded border-b dark:bg-slate-800"
             />
           </div>
         </div>
-        <h2 className="text-xl font-bold mt-4">Share</h2>
+        <h2 className="text-xl font-bold mt-4 dark:text-white">Share</h2>
         <input
           value={shareLink}
           onClick={e => e.currentTarget.select()}
-          className="mt-2 p-1 rounded border-b"
+          className="mt-2 p-1 rounded border-b dark:bg-slate-800"
         />
       </div>
     </div>

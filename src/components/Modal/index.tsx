@@ -14,7 +14,7 @@ export const Modal: React.FC<ModalProps> = ({ isShown, ...props }) => {
         clsx(
           "absolute top-0 left-0 z-10",
           "flex justify-center items-center",
-          "w-full h-full bg-gray-800/50 text-center",
+          "w-full h-full bg-black/50 text-center",
           {
             hidden: !isShown,
           }
