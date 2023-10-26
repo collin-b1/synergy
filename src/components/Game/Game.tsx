@@ -132,10 +132,12 @@ const Game: React.FC<GameProps> = props => {
 
   return (
     <>
-      <div className="flex-1 flex flex-col justify-center max-w-lg mx-auto p-2">
+      <div className="flex-1 flex flex-col justify-center max-w-lg mx-auto p-4 dark:bg-slate-800 rounded-lg">
         <div className="flex-1 text-center mb-4 flex items-center">
           <div className="flex-1">
-            <h2 className="font-bold text-lg">{levelProperties.name}</h2>
+            <h2 className="font-bold text-lg dark:text-white">
+              {levelProperties.name}
+            </h2>
             <h3 className="overflow-ellipsis">by {levelProperties.author}</h3>
           </div>
         </div>
@@ -151,23 +153,23 @@ const Game: React.FC<GameProps> = props => {
             key={levelProperties.name}
           />
           <Modal isShown={showModal} onClick={() => setShowModal(false)}>
-            <div className="bg-gray-100 p-4 sm:px-12 sm:py-4 rounded">
-              <h2 className="font-bold text-2xl mb-4">Congratulations!</h2>
+            <div className="bg-slate-200 dark:bg-slate-800 p-4 sm:px-12 sm:py-4 rounded border dark:border-slate-500 shadow-xl">
+              <h2 className="font-bold text-2xl mb-4 dark:text-white">
+                Congratulations!
+              </h2>
               <p className="">
                 You solved{" "}
                 <span className="font-bold">{levelProperties.name}</span> in
               </p>
               <div className="flex flex-col py-4">
-                <span className="flex-1 font-bold text-2xl">
+                <span className="flex-1 font-bold text-2xl dark:text-white">
                   Moves: {levelStats.moves}
                 </span>
-                <span className="flex-1 font-bold text-2xl">
+                <span className="flex-1 font-bold text-2xl dark:text-white">
                   Retries: {levelStats.attempts}
                 </span>
               </div>
-              <p className="text-sm">
-                <span className="text-gray-600">Click anywhere to exit</span>
-              </p>
+              <p className="text-sm">Click anywhere to exit</p>
             </div>
           </Modal>
         </div>

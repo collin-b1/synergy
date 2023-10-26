@@ -36,9 +36,9 @@ export const SOLID_TILES: TileSet = [Tile.OBSTACLE, Tile.WALL, Tile.PLAYER];
 export const MOVABLE_TILES: TileSet = [Tile.OBSTACLE, Tile.PLAYER];
 
 export const TileColors = new Map<Tile, string>([
-  [Tile.EMPTY, "bg-gray-300"],
+  [Tile.EMPTY, "bg-gray-300 dark:bg-slate-700"],
   [Tile.WALL, "bg-gray-800"],
-  [Tile.OBSTACLE, "bg-gray-600"],
+  [Tile.OBSTACLE, "bg-gray-600 dark:bg-gray-200"],
   [Tile.PLAYER, "bg-red-400"],
   [Tile.STICKY, "bg-green-400"],
 ]);

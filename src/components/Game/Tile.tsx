@@ -46,10 +46,10 @@ const Tile = (props: TileProps) => {
     <button
       className={twMerge(
         clsx(
-          "aspect-square rounded hover:border-4 active:border-4 transition-[border] ease-linear delay-0 motion-reduce:transition-none",
+          "transition-[ring] aspect-square rounded active:ring-2 ease-linear delay-0 motion-reduce:transition-none",
           TileColors.get(props.value),
           {
-            "border-4 border-blue-500": props.selected,
+            "ring-4 ring-blue-500 ring-inset": props.selected,
             "flex justify-center items-center": isDestination,
             "bg-portal bg-cover":
               props.isGoal && props.value === TileValue.EMPTY,
@@ -60,7 +60,7 @@ const Tile = (props: TileProps) => {
       role="gridcell"
     >
       {isDestination ? (
-        <div className="absolute p-1 sm:p-2 rounded-full bg-gray-500/30 backdrop-blur-lg"></div>
+        <div className="absolute p-1 sm:p-2 rounded-full bg-black/25 dark:bg-white/25 backdrop-blur-lg"></div>
       ) : (
         <></>
       )}
