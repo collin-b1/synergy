@@ -30,6 +30,9 @@ export interface GameLevel {
 
   // Author of the level
   author?: string;
+
+  // Level description (used for tutorials)
+  description?: string;
 }
 
 export interface LevelStats {

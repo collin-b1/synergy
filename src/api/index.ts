@@ -9,10 +9,10 @@ const levels: Array<GameLevel> = [
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 3],
     ],
+    name: "Moving Player (Tutorial)",
     goal: { column: 2, row: 2 },
-    author: "collin-b1",
-    difficulty: 1,
-    name: "Tutorial - Moving Player",
+    description:
+      'The goal is to reach the "Portal" tile by moving the red player. The player may only move in a straight line, and must continue to move until they reach an "Obstacle". Select the player to see available destination tiles.',
   },
   {
     startingConfiguration: [
@@ -22,24 +22,10 @@ const levels: Array<GameLevel> = [
       [0, 0, 0, 0, 0],
       [2, 0, 0, 2, 0],
     ],
+    name: "Moving Objects (Tutorial)",
     goal: { column: 2, row: 2 },
-    author: "collin-b1",
-    difficulty: 1,
-    name: "Tutorial - Moving Objects",
-  },
-  {
-    startingConfiguration: [
-      [0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 3, 0],
-      [0, 0, 0, 0, 0, 0, 0],
-      [4, 0, 0, 0, 4, 0, 0],
-      [0, 0, 0, 0, 0, 2, 0],
-      [0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0],
-    ],
-    author: "collin-b1",
-    name: "Tutorial - Sticky Zones",
-    goal: { column: 3, row: 3 },
+    description:
+      'Gray "Obstacles" may also be moved similarly to the player. Try to move obstacles to create a path for the player to reach the goal.',
   },
   {
     startingConfiguration: [
@@ -50,7 +36,7 @@ const levels: Array<GameLevel> = [
       [2, 0, 0, 0, 3],
     ],
     author: "Brian",
-    name: "Untitled",
+    name: "Tower",
     goal: { row: 2, column: 2 },
   },
   {
@@ -67,6 +53,18 @@ const levels: Array<GameLevel> = [
   },
   {
     startingConfiguration: [
+      [0, 0, 2, 0, 0],
+      [0, 3, 0, 0, 2],
+      [2, 0, 0, 2, 0],
+      [0, 0, 2, 0, 0],
+      [0, 0, 0, 0, 0],
+    ],
+    author: "collin-b1",
+    name: "Slashes",
+    goal: { row: 2, column: 2 },
+  },
+  {
+    startingConfiguration: [
       [0, 0, 3, 0, 0],
       [0, 0, 2, 0, 0],
       [0, 0, 2, 0, 2],
@@ -76,6 +74,19 @@ const levels: Array<GameLevel> = [
     author: "Lunar Lockout",
     name: "21",
     goal: { column: 2, row: 2 },
+  },
+  {
+    startingConfiguration: [
+      [0, 4, 0, 0, 0],
+      [0, 0, 0, 4, 0],
+      [3, 4, 0, 0, 4],
+      [4, 0, 4, 0, 0],
+      [0, 0, 0, 4, 0],
+    ],
+    name: "Sticky Zones (Tutorial)",
+    goal: { row: 2, column: 2 },
+    description:
+      'Green "Sticky" tiles are unmovable tiles which the player may choose to stop at or continue moving through.',
   },
   {
     startingConfiguration: [
@@ -151,15 +162,15 @@ const levels: Array<GameLevel> = [
   },
   {
     startingConfiguration: [
-      [0, 4, 2, 0, 0, 4, 0],
-      [0, 4, 0, 0, 0, 4, 0],
-      [0, 4, 0, 0, 0, 4, 0],
-      [0, 0, 0, 4, 0, 0, 0],
-      [0, 2, 0, 3, 0, 0, 0],
+      [4, 2, 0, 0, 4],
+      [4, 0, 0, 0, 4],
+      [4, 0, 0, 0, 4],
+      [0, 0, 4, 0, 0],
+      [2, 0, 3, 0, 0],
     ],
     author: "collin-b1",
     name: "Cactus",
-    goal: { column: 3, row: 2 },
+    goal: { column: 2, row: 2 },
   },
   {
     startingConfiguration: [

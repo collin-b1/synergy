@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getLevel, getLevelCount } from "@/api";
 import Board from "./Board";
-import {
+import type {
   GameLevel,
   GridConfiguration,
   GridPosition,
@@ -98,19 +98,17 @@ const Game: React.FC<GameProps> = props => {
   }
 
   useEffect(() => {
-    console.log("Winning pt 2...");
     if (levelStats.completed) {
-      console.log("winning pt 3...");
       setLevelStats(stats => ({
         ...stats,
         time: 0,
       }));
       setShowModal(() => true);
-      console.log(
+      /*console.log(
         `Level won in ${levelStats.attempts} attempts and ${levelStats.moves} moves.`
-      );
+      );*/
     }
-  }, [levelStats.attempts, levelStats.completed, levelStats.moves]);
+  }, [levelStats.completed]);
 
   const resetLevelStats = () => {
     setLevelStats({
@@ -138,7 +136,12 @@ const Game: React.FC<GameProps> = props => {
             <h2 className="font-bold text-lg dark:text-white">
               {levelProperties.name}
             </h2>
-            <h3 className="overflow-ellipsis">by {levelProperties.author}</h3>
+            {levelProperties.author && (
+              <h3 className="overflow-ellipsis">by {levelProperties.author}</h3>
+            )}
+            {levelProperties.description && (
+              <p className="text-sm">{levelProperties.description}</p>
+            )}
           </div>
         </div>
         <div className="mb-4 relative">

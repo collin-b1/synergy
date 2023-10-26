@@ -1,4 +1,5 @@
-import { Tile, TileSet } from "./types";
+import { Tile } from "./types";
+import type { TileSet } from "./types";
 
 export const LEVEL = {
   MIN_ROWS: 3,
@@ -10,7 +11,7 @@ export const LEVEL = {
   DEFAULT_COLUMNS: 5,
 
   MIN_NAME_LENGTH: 0,
-  MAX_NAME_LENGTH: 20,
+  MAX_NAME_LENGTH: 50,
   DEFAULT_NAME: "Untitled Level",
 
   MIN_AUTHOR_LENGTH: 0,

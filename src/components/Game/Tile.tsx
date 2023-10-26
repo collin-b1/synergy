@@ -51,7 +51,7 @@ const Tile = (props: TileProps) => {
           {
             "ring-4 ring-blue-500 ring-inset": props.selected,
             "flex justify-center items-center": isDestination,
-            "bg-portal bg-cover":
+            "bg-purple-500 bg-portal bg-cover":
               props.isGoal && props.value === TileValue.EMPTY,
           }
         )

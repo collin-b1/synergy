@@ -1,4 +1,4 @@
-import { GridConfiguration, GridPosition } from "@/lib/types";
+import type { GridConfiguration, GridPosition } from "@/lib/types";
 import { useEffect, useState } from "react";
 import Tile from "./Tile";
 import { getDestinationTiles, moveTile } from "@/utils/boardActions";
