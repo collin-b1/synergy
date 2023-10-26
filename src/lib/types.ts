@@ -32,6 +32,13 @@ export interface GameLevel {
   author?: string;
 }
 
+export interface LevelStats {
+  completed: boolean;
+  time: number;
+  moves: number;
+  attempts: number;
+}
+
 export interface LevelQueryParameters {
   code: string;
 }

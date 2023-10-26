@@ -51,7 +51,7 @@ const Tile = (props: TileProps) => {
           {
             "border-4 border-blue-500": props.selected,
             "flex justify-center items-center": isDestination,
-            "bg-portal bg-cover ":
+            "bg-portal bg-cover":
               props.isGoal && props.value === TileValue.EMPTY,
           }
         )
