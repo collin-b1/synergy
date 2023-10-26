@@ -7,6 +7,9 @@ interface BoardProps {
   configuration: GridConfiguration;
   selectedTile: GridPosition | null;
   setSelectedTile: React.Dispatch<React.SetStateAction<GridPosition | null>>;
+  handleMove?: () => void;
+  handleLevelWin?: () => void;
+  wonLevel?: boolean;
   goal: GridPosition | null;
 }
 
@@ -16,7 +19,7 @@ const Board = (props: BoardProps) => {
   );
 
   const handleMoveSelectedTile = (destination: GridPosition) => {
-    if (props.selectedTile) {
+    if (props.selectedTile && !props.wonLevel) {
       const moved = moveTile(
         props.configuration,
         props.selectedTile,
@@ -26,11 +29,13 @@ const Board = (props: BoardProps) => {
         moved.column === destination.column &&
         moved.row === destination.row
       ) {
+        if (props.handleMove) props.handleMove();
         if (
           props.goal &&
           props.configuration[props.goal.row][props.goal.column] === 3
         ) {
-          window.alert("You win!\n(More satisfying win alert coming soon...)");
+          if (props.handleLevelWin) props.handleLevelWin();
+          //window.alert("You win!\n(More satisfying win alert coming soon...)");
         }
       }
     }
@@ -38,11 +43,11 @@ const Board = (props: BoardProps) => {
 
   useEffect(() => {
     setMoveDestinations(() =>
-      props.selectedTile
+      props.selectedTile && !props.wonLevel
         ? getDestinationTiles(props.configuration, props.selectedTile)
         : []
     );
-  }, [props.configuration, props.selectedTile]);
+  }, [props.configuration, props.selectedTile, props.wonLevel]);
 
   return (
     <div
