@@ -13,10 +13,7 @@ import {
 } from "@/utils/boardActions";
 import Button from "../Button";
 import { LEVEL } from "@/lib/constants";
-<<<<<<< HEAD
-=======
 import Modal from "../Modal";
->>>>>>> dc6e1d5a3819668dbf18f9a6c61cdea44d13849c
 
 interface GameProps {
   code: string | undefined;
