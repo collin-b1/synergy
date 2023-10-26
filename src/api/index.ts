@@ -229,7 +229,7 @@ const getLevelCount = (): number => {
   return levels.length;
 };
 
-const getLevel = (levelNumber: number): GameLevel => {
+const getLevel = (levelNumber: number): Readonly<GameLevel> => {
   return Object.freeze(levels[levelNumber]) || {};
 };
 
