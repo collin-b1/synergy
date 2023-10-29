@@ -12,9 +12,7 @@ export const Modal: React.FC<ModalProps> = ({ isShown, ...props }) => {
     <div
       className={twMerge(
         clsx(
-          "absolute top-0 left-0 z-10",
-          "flex justify-center items-center",
-          "w-full h-full bg-black/50 text-center",
+          "absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-black/50 text-center",
           {
             hidden: !isShown,
           }

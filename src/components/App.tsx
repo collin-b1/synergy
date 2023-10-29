@@ -10,7 +10,7 @@ function App() {
 
   return (
     <>
-      <main className="flex flex-row mx-auto mt-4">
+      <main className="mx-auto mt-4 flex flex-row">
         <Routes>
           <Route
             path="/"
@@ -24,7 +24,7 @@ function App() {
           />
         </Routes>
       </main>
-      <footer className="p-2 max-w-md mx-auto">
+      <footer className="mx-auto max-w-md p-2">
         <ul className="flex text-center">
           <li className="flex-1">
             {pathname !== "/" ? (

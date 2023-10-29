@@ -130,21 +130,23 @@ const Game: React.FC<GameProps> = props => {
 
   return (
     <>
-      <div className="flex-1 flex flex-col justify-center max-w-lg mx-auto p-4 dark:bg-slate-800 rounded-lg">
-        <div className="flex-1 text-center mb-4 flex items-center">
+      <div className="mx-auto flex max-w-lg flex-1 flex-col justify-center rounded-lg p-4 dark:bg-slate-800">
+        <div className="mb-4 flex flex-1 items-center text-center">
           <div className="flex-1">
-            <h2 className="font-bold text-lg dark:text-white">
-              {levelProperties.name}
-            </h2>
+            {levelProperties.name && (
+              <h2 className="text-lg font-bold dark:text-white">
+                {levelProperties.name}
+              </h2>
+            )}
             {levelProperties.author && (
-              <h3 className="overflow-ellipsis">by {levelProperties.author}</h3>
+              <h3 className="text-ellipsis">by {levelProperties.author}</h3>
             )}
             {levelProperties.description && (
               <p className="text-sm">{levelProperties.description}</p>
             )}
           </div>
         </div>
-        <div className="mb-4 relative">
+        <div className="relative mb-4">
           <Board
             configuration={configuration}
             goal={levelProperties.goal || null}
@@ -156,8 +158,8 @@ const Game: React.FC<GameProps> = props => {
             key={levelProperties.name}
           />
           <Modal isShown={showModal} onClick={() => setShowModal(false)}>
-            <div className="bg-slate-200 dark:bg-slate-800 p-4 sm:px-12 sm:py-4 rounded border dark:border-slate-500 shadow-xl">
-              <h2 className="font-bold text-2xl mb-4 dark:text-white">
+            <div className="rounded border bg-slate-200 p-4 shadow-xl dark:border-slate-500 dark:bg-slate-800 sm:px-12 sm:py-4">
+              <h2 className="mb-4 text-2xl font-bold dark:text-white">
                 Congratulations!
               </h2>
               <p className="">
@@ -165,10 +167,10 @@ const Game: React.FC<GameProps> = props => {
                 <span className="font-bold">{levelProperties.name}</span> in
               </p>
               <div className="flex flex-col py-4">
-                <span className="flex-1 font-bold text-2xl dark:text-white">
+                <span className="flex-1 text-2xl font-bold dark:text-white">
                   Moves: {levelStats.moves}
                 </span>
-                <span className="flex-1 font-bold text-2xl dark:text-white">
+                <span className="flex-1 text-2xl font-bold dark:text-white">
                   Retries: {levelStats.attempts}
                 </span>
               </div>
@@ -176,14 +178,14 @@ const Game: React.FC<GameProps> = props => {
             </div>
           </Modal>
         </div>
-        <div className="flex-1 flex items-center">
+        <div className="flex flex-1 items-center">
           <Button
             onClick={handlePreviousLevel}
             disabled={levelNumber === 0 || isUserLevel}
           >
             ◁
           </Button>
-          <div className="flex-1 flex justify-center">
+          <div className="flex flex-1 justify-center">
             <Button onClick={handleRestartLevel}>
               Restart Level{" "}
               {levelStats.attempts > 0 ? `(${levelStats.attempts})` : ""}
