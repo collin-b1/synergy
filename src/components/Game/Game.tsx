@@ -1,34 +1,44 @@
 import { useEffect, useState } from "react";
 import { getLevel, getLevelCount } from "@/api";
 import Board from "./Board";
-import type {
-  GameLevel,
-  GridConfiguration,
-  GridPosition,
-  LevelStats,
+import {
+  Tile,
+  type GameLevel,
+  type GridConfiguration,
+  type GridPosition,
+  type LevelStats,
+  UserSettings,
 } from "@/lib/types";
 import {
   createEmptyConfiguration,
   decodeLevelString,
+  getDestinationTiles,
+  moveTile,
 } from "@/utils/boardActions";
 import Button from "../Button";
 import { LEVEL } from "@/lib/constants";
 import Modal from "../Modal";
+import ModalScreen from "../Modal/ModalScreen";
+import Toggle from "../Toggle";
 
 interface GameProps {
   code: string | undefined;
 }
 
 const Game: React.FC<GameProps> = props => {
+  const [userSettings, setUserSettings] = useState<UserSettings>({
+    hardMode: false,
+    saveGameData: false,
+  });
   const [levelNumber, setLevelNumber] = useState<number>(0);
   const [levelCount, setLevelCount] = useState<number>(0);
   const [levelStats, setLevelStats] = useState<LevelStats>({
     completed: false,
     attempts: 0,
-    moves: 0,
+    moves: [],
     time: 0,
   });
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [modal, setModal] = useState<null | "win" | "settings">(null);
   // These properties do not change except for per level
   const [levelProperties, setLevelProperties] = useState<GameLevel>({
     startingConfiguration: createEmptyConfiguration(
@@ -38,6 +48,9 @@ const Game: React.FC<GameProps> = props => {
     author: LEVEL.DEFAULT_AUTHOR,
     name: LEVEL.DEFAULT_NAME,
   });
+  const [moveDestinations, setMoveDestinations] = useState<Array<GridPosition>>(
+    []
+  );
 
   // This is the board state that gets changed
   const [configuration, setConfiguration] = useState<GridConfiguration>(
@@ -46,6 +59,14 @@ const Game: React.FC<GameProps> = props => {
 
   const [selectedTile, setSelectedTile] = useState<GridPosition | null>(null);
   const [isUserLevel, setIsUserLevel] = useState<boolean>(false);
+
+  useEffect(() => {
+    setMoveDestinations(() =>
+      selectedTile && !levelStats.completed
+        ? getDestinationTiles(configuration, selectedTile)
+        : []
+    );
+  }, [configuration, selectedTile, levelStats.completed]);
 
   useEffect(() => {
     setLevelCount(() => getLevelCount());
@@ -70,14 +91,28 @@ const Game: React.FC<GameProps> = props => {
     setConfiguration(structuredClone(levelProperties.startingConfiguration));
   }, [levelProperties.startingConfiguration]);
 
-  const handleNextLevel = () => {
-    resetLevelStats();
-    setLevelNumber(num => num + 1);
-  };
-
-  const handlePreviousLevel = () => {
-    resetLevelStats();
-    setLevelNumber(num => num - 1);
+  const handleMoveSelectedTile = (destination: GridPosition) => {
+    if (selectedTile && !levelStats.completed) {
+      const moved = moveTile(configuration, selectedTile, destination);
+      if (
+        moved.column === destination.column &&
+        moved.row === destination.row
+      ) {
+        setLevelStats(stats => ({
+          ...stats,
+          moves: [...stats.moves, [selectedTile, destination]],
+        }));
+        setSelectedTile(moved);
+        if (
+          levelProperties.goal &&
+          configuration[levelProperties.goal.row][
+            levelProperties.goal.column
+          ] === Tile.PLAYER
+        ) {
+          handleLevelWin();
+        }
+      }
+    }
   };
 
   const handleRestartLevel = () => {
@@ -99,14 +134,7 @@ const Game: React.FC<GameProps> = props => {
 
   useEffect(() => {
     if (levelStats.completed) {
-      setLevelStats(stats => ({
-        ...stats,
-        time: 0,
-      }));
-      setShowModal(() => true);
-      /*console.log(
-        `Level won in ${levelStats.attempts} attempts and ${levelStats.moves} moves.`
-      );*/
+      setModal(() => "win");
     }
   }, [levelStats.completed]);
 
@@ -114,27 +142,31 @@ const Game: React.FC<GameProps> = props => {
     setLevelStats({
       attempts: 0,
       completed: false,
-      moves: 0,
+      moves: [],
       time: 0,
     });
-    setShowModal(() => false);
+    if (modal === "win") {
+      setModal(() => null);
+    }
     setSelectedTile(() => null);
   };
 
-  function handleMove(): void {
-    setLevelStats(stats => ({
-      ...stats,
-      moves: stats.moves + 1,
-    }));
-  }
+  const handleClickModal: React.MouseEventHandler = e => {
+    // Only exit if clicked parent
+    if (e.target === e.currentTarget) {
+      if (modal !== null) {
+        setModal(() => null);
+      }
+    }
+  };
 
   return (
     <>
-      <div className="mx-auto flex max-w-lg flex-1 flex-col justify-center rounded-lg p-4 dark:bg-slate-800">
-        <div className="mb-4 flex flex-1 items-center text-center">
+      <div className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-center rounded-lg p-4 dark:bg-slate-800">
+        <div className="mb-4 flex flex-1 items-center">
           <div className="flex-1">
             {levelProperties.name && (
-              <h2 className="text-lg font-bold dark:text-white">
+              <h2 className="text-xl font-bold dark:text-white">
                 {levelProperties.name}
               </h2>
             )}
@@ -145,42 +177,84 @@ const Game: React.FC<GameProps> = props => {
               <p className="text-sm">{levelProperties.description}</p>
             )}
           </div>
+          <Button onClick={() => setModal("settings")}>⚙️</Button>
         </div>
         <div className="relative mb-4">
           <Board
             configuration={configuration}
+            hardMode={userSettings.hardMode}
+            moveDestinations={moveDestinations}
             goal={levelProperties.goal || null}
             selectedTile={selectedTile}
             setSelectedTile={setSelectedTile}
-            handleMove={handleMove}
-            handleLevelWin={handleLevelWin}
-            wonLevel={levelStats.completed}
+            handleMoveSelectedTile={handleMoveSelectedTile}
             key={levelProperties.name}
           />
-          <Modal isShown={showModal} onClick={() => setShowModal(false)}>
-            <div className="rounded border bg-slate-200 p-4 shadow-xl dark:border-slate-500 dark:bg-slate-800 sm:px-12 sm:py-4">
-              <h2 className="mb-4 text-2xl font-bold dark:text-white">
-                Congratulations!
-              </h2>
-              <p className="">
-                You solved{" "}
-                <span className="font-bold">{levelProperties.name}</span> in
-              </p>
-              <div className="flex flex-col py-4">
-                <span className="flex-1 text-2xl font-bold dark:text-white">
-                  Moves: {levelStats.moves}
-                </span>
-                <span className="flex-1 text-2xl font-bold dark:text-white">
-                  Retries: {levelStats.attempts}
-                </span>
-              </div>
-              <p className="text-sm">Click anywhere to exit</p>
-            </div>
+          <Modal isShown={modal !== null} onClick={handleClickModal}>
+            {modal === "win" && (
+              <ModalScreen>
+                <h2 className="mb-4 text-2xl font-bold dark:text-white">
+                  Congratulations!
+                </h2>
+                <p className="">
+                  You solved{" "}
+                  <span className="font-bold">{levelProperties.name}</span> in
+                </p>
+                <div className="flex flex-col py-4">
+                  <span className="flex-1 text-2xl font-bold dark:text-white">
+                    Moves: {levelStats.moves.length}
+                  </span>
+                  <span className="flex-1 text-2xl font-bold dark:text-white">
+                    Retries: {levelStats.attempts}
+                  </span>
+                </div>
+              </ModalScreen>
+            )}
+            {modal === "settings" && (
+              <ModalScreen>
+                <h2 className="mb-4 text-xl font-bold dark:text-white">
+                  Settings
+                </h2>
+                <div className="flex p-2">
+                  <Toggle
+                    toggled={userSettings.hardMode}
+                    name="hardMode"
+                    handleClick={() =>
+                      setUserSettings(settings => ({
+                        ...settings,
+                        hardMode: !settings.hardMode,
+                      }))
+                    }
+                  />
+                  <label htmlFor="hardMode" className="pl-4">
+                    Hard Mode
+                  </label>
+                </div>
+                <div className="flex p-2">
+                  <Toggle
+                    toggled={userSettings.saveGameData}
+                    name="saveData"
+                    handleClick={() =>
+                      setUserSettings(settings => ({
+                        ...settings,
+                        saveGameData: !settings.saveGameData,
+                      }))
+                    }
+                  />
+                  <label htmlFor="saveData" className="pl-4">
+                    Save Game Data
+                  </label>
+                </div>
+              </ModalScreen>
+            )}
           </Modal>
         </div>
         <div className="flex flex-1 items-center">
           <Button
-            onClick={handlePreviousLevel}
+            onClick={() => {
+              resetLevelStats();
+              setLevelNumber(num => num - 1);
+            }}
             disabled={levelNumber === 0 || isUserLevel}
           >
             ◁
@@ -192,7 +266,10 @@ const Game: React.FC<GameProps> = props => {
             </Button>
           </div>
           <Button
-            onClick={handleNextLevel}
+            onClick={() => {
+              resetLevelStats();
+              setLevelNumber(num => num + 1);
+            }}
             disabled={levelNumber === levelCount - 1 || isUserLevel}
           >
             ▷

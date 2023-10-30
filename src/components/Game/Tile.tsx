@@ -12,7 +12,8 @@ interface TileProps {
   selected: boolean;
   isGoal: boolean;
   moveDestinations: Array<GridPosition>;
-  handleMoveSelectedTile: (destination: GridPosition) => void;
+  hardMode?: boolean;
+  handleMoveSelectedTile?: (destination: GridPosition) => void;
   setSelectedTile: React.Dispatch<React.SetStateAction<GridPosition | null>>;
 }
 
@@ -33,12 +34,12 @@ const Tile = (props: TileProps) => {
 
   const handleClick = () => {
     props.setSelectedTile(() => {
-      if (isDestination && !props.selected) {
+      if (props.handleMoveSelectedTile && isDestination && !props.selected) {
         props.handleMoveSelectedTile({ row: props.posY, column: props.posX });
       } else if (!props.selected) {
         return { column: props.posX, row: props.posY };
       }
-      return null;
+      return { row: props.posY, column: props.posX };
     });
   };
 
@@ -60,8 +61,15 @@ const Tile = (props: TileProps) => {
       onClick={handleClick}
       role="gridcell"
     >
-      {isDestination ? (
-        <div className="absolute rounded-full bg-black/25 p-1 backdrop-blur-lg dark:bg-white/25 sm:p-2"></div>
+      {isDestination && !props.hardMode ? (
+        <div
+          className={twMerge(
+            clsx(
+              "absolute rounded-full bg-black/25 p-1 backdrop-blur-lg dark:bg-white/25 sm:p-2",
+              { "bg-black dark:bg-black": props.isGoal }
+            )
+          )}
+        ></div>
       ) : (
         <></>
       )}

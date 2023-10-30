@@ -7,39 +7,45 @@ export type GridConfiguration = Array<Array<number>>;
 
 export enum Tile {
   EMPTY = 0,
-  WALL = 1, // Immovable object
+  WALL = 1, // Immovable object (unused)
   OBSTACLE = 2, // Movable object
   PLAYER = 3,
   STICKY = 4,
+  POWERED = 5,
 }
 
 export type TileSet = Array<Tile>;
 
 export interface GameLevel {
-  // Starting configuration of the game board
+  /** Starting configuration of the game board */
   startingConfiguration: GridConfiguration;
 
-  // Custom goal position. Will default the middle of the board
+  /** Custom goal position */
   goal?: GridPosition | null;
 
-  // Difficulty of the level
-  difficulty?: 1 | 2 | 3 | 4 | 5;
-
-  // Name of the level
+  /** Name of the level */
   name?: string;
 
-  // Author of the level
+  /** Author of the level */
   author?: string;
 
-  // Level description (used for tutorials)
+  /** Level description (used for tutorials) */
   description?: string;
+
+  /** Number of moves per star reward from least to greatest */
+  moveTiers?: [number, number];
 }
 
 export interface LevelStats {
   completed: boolean;
   time: number;
-  moves: number;
+  moves: Array<[GridPosition, GridPosition]>;
   attempts: number;
+}
+
+export interface UserSettings {
+  hardMode: boolean;
+  saveGameData: boolean;
 }
 
 export interface LevelQueryParameters {
