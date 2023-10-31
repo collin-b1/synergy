@@ -1,7 +1,7 @@
 import { Route, Routes, useLocation, useSearchParams } from "react-router-dom";
-import Link from "./Link";
-import Game from "./Game/Game";
-import LevelEditor from "./LevelEditor/LevelEditor";
+import { Game } from "@/components/Game";
+import { LevelEditor } from "@/components/LevelEditor";
+import { Link } from "@/components/Link";
 
 function App() {
   const { pathname } = useLocation();
@@ -25,24 +25,37 @@ function App() {
         </Routes>
       </main>
       <footer className="mx-auto max-w-md p-2">
-        <ul className="flex text-center">
-          <li className="flex-1">
-            {pathname !== "/" ? (
-              <Link href="/" text="Home" />
-            ) : (
-              <Link href="/editor" text="Editor" />
-            )}
-          </li>
-          <li className="flex-1">
-            <Link
-              href="https://github.com/collin-b1/synergy#game-objective"
-              text="How to Play"
-            />
-          </li>
-          <li className="flex-1">
-            <Link href="https://github.com/collin-b1/synergy" text="Source" />
-          </li>
-        </ul>
+        <nav>
+          <ul className="flex text-center">
+            <li className="flex-1">
+              {pathname !== "/" ? (
+                <Link to="/" className="text-blue-500 hover:underline">
+                  Home
+                </Link>
+              ) : (
+                <Link to="/editor" className="text-blue-500 hover:underline">
+                  Editor
+                </Link>
+              )}
+            </li>
+            <li className="flex-1">
+              <Link
+                to="https://github.com/collin-b1/synergy#game-objective"
+                className="text-blue-500 hover:underline"
+              >
+                How to Play
+              </Link>
+            </li>
+            <li className="flex-1">
+              <Link
+                to="https://github.com/collin-b1/synergy"
+                className="text-blue-500 hover:underline"
+              >
+                Source
+              </Link>
+            </li>
+          </ul>
+        </nav>
       </footer>
     </>
   );

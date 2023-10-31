@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { getLevel, getLevelCount } from "@/api";
-import Board from "./Board";
+import { Board } from "@/components/Game";
+import { Modal, ModalScreen } from "@/components/Modal";
+import { Toggle } from "@/components/Toggle";
+import { Button } from "@/components/Button";
 import {
   Tile,
   type GameLevel,
@@ -8,24 +11,20 @@ import {
   type GridPosition,
   type LevelStats,
   UserSettings,
-} from "@/lib/types";
+} from "@/types";
 import {
   createEmptyConfiguration,
   decodeLevelString,
   getDestinationTiles,
   moveTile,
 } from "@/utils/boardActions";
-import Button from "../Button";
-import { LEVEL } from "@/lib/constants";
-import Modal from "../Modal";
-import ModalScreen from "../Modal/ModalScreen";
-import Toggle from "../Toggle";
+import { LEVEL } from "@/constants";
 
 interface GameProps {
   code: string | undefined;
 }
 
-const Game: React.FC<GameProps> = props => {
+export const Game: React.FC<GameProps> = props => {
   const [userSettings, setUserSettings] = useState<UserSettings>({
     hardMode: false,
     saveGameData: false,
@@ -66,7 +65,7 @@ const Game: React.FC<GameProps> = props => {
         ? getDestinationTiles(configuration, selectedTile)
         : []
     );
-  }, [configuration, selectedTile, levelStats.completed]);
+  }, [configuration, selectedTile, levelStats.completed, levelProperties.goal]);
 
   useEffect(() => {
     setLevelCount(() => getLevelCount());
@@ -84,36 +83,11 @@ const Game: React.FC<GameProps> = props => {
         setLevelProperties(() => level);
       }
     }
-    resetLevelStats();
   }, [levelNumber, props.code]);
 
   useEffect(() => {
     setConfiguration(structuredClone(levelProperties.startingConfiguration));
   }, [levelProperties.startingConfiguration]);
-
-  const handleMoveSelectedTile = (destination: GridPosition) => {
-    if (selectedTile && !levelStats.completed) {
-      const moved = moveTile(configuration, selectedTile, destination);
-      if (
-        moved.column === destination.column &&
-        moved.row === destination.row
-      ) {
-        setLevelStats(stats => ({
-          ...stats,
-          moves: [...stats.moves, [selectedTile, destination]],
-        }));
-        setSelectedTile(moved);
-        if (
-          levelProperties.goal &&
-          configuration[levelProperties.goal.row][
-            levelProperties.goal.column
-          ] === Tile.PLAYER
-        ) {
-          handleLevelWin();
-        }
-      }
-    }
-  };
 
   const handleRestartLevel = () => {
     setConfiguration(structuredClone(levelProperties.startingConfiguration));
@@ -124,19 +98,6 @@ const Game: React.FC<GameProps> = props => {
       attempts: attempts + 1,
     }));
   };
-
-  function handleLevelWin() {
-    setLevelStats(stats => ({
-      ...stats,
-      completed: true,
-    }));
-  }
-
-  useEffect(() => {
-    if (levelStats.completed) {
-      setModal(() => "win");
-    }
-  }, [levelStats.completed]);
 
   const resetLevelStats = () => {
     setLevelStats({
@@ -160,6 +121,38 @@ const Game: React.FC<GameProps> = props => {
     }
   };
 
+  const handleMoveSelectedTile = (destination: GridPosition) => {
+    // Clone of the current configuration so that we aren't directly modifying state
+    const cloneBoard = structuredClone(configuration);
+    const selected = selectedTile;
+
+    if (selected && !levelStats.completed) {
+      const moved = moveTile(cloneBoard, selected, destination);
+      if (
+        moved.column === destination.column &&
+        moved.row === destination.row
+      ) {
+        setConfiguration(() => cloneBoard);
+        setLevelStats(stats => ({
+          ...stats,
+          moves: [...stats.moves, [selected, destination]],
+        }));
+
+        if (
+          levelProperties.goal &&
+          cloneBoard[levelProperties.goal.row][levelProperties.goal.column] ===
+            Tile.PLAYER
+        ) {
+          setLevelStats(stats => ({
+            ...stats,
+            completed: true,
+          }));
+          setModal("win");
+        }
+      }
+    }
+  };
+
   return (
     <>
       <div className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-center rounded-lg p-4 dark:bg-slate-800">
@@ -177,7 +170,11 @@ const Game: React.FC<GameProps> = props => {
               <p className="text-sm">{levelProperties.description}</p>
             )}
           </div>
-          <Button onClick={() => setModal("settings")}>⚙️</Button>
+          <Button className="m-2" onClick={() => setModal("settings")}>
+            <span role="img" aria-label="settings">
+              ⚙️
+            </span>
+          </Button>
         </div>
         <div className="relative mb-4">
           <Board
@@ -188,7 +185,6 @@ const Game: React.FC<GameProps> = props => {
             selectedTile={selectedTile}
             setSelectedTile={setSelectedTile}
             handleMoveSelectedTile={handleMoveSelectedTile}
-            key={levelProperties.name}
           />
           <Modal isShown={modal !== null} onClick={handleClickModal}>
             {modal === "win" && (
@@ -230,21 +226,6 @@ const Game: React.FC<GameProps> = props => {
                     Hard Mode
                   </label>
                 </div>
-                <div className="flex p-2">
-                  <Toggle
-                    toggled={userSettings.saveGameData}
-                    name="saveData"
-                    handleClick={() =>
-                      setUserSettings(settings => ({
-                        ...settings,
-                        saveGameData: !settings.saveGameData,
-                      }))
-                    }
-                  />
-                  <label htmlFor="saveData" className="pl-4">
-                    Save Game Data
-                  </label>
-                </div>
               </ModalScreen>
             )}
           </Modal>
@@ -279,5 +260,3 @@ const Game: React.FC<GameProps> = props => {
     </>
   );
 };
-
-export default Game;

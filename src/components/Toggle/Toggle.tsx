@@ -3,7 +3,7 @@ interface ToggleProps extends React.HTMLProps<HTMLInputElement> {
   toggled?: boolean;
 }
 
-const Toggle: React.FC<ToggleProps> = props => {
+export const Toggle: React.FC<ToggleProps> = props => {
   const { toggled, handleClick, ...rest } = props;
 
   return (
@@ -19,5 +19,3 @@ const Toggle: React.FC<ToggleProps> = props => {
     </label>
   );
 };
-
-export default Toggle;

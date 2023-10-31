@@ -1,5 +1,5 @@
-import type { GridConfiguration, GridPosition } from "@/lib/types";
-import Tile from "./Tile";
+import type { GridConfiguration, GridPosition } from "@/types";
+import { Tile } from "@/components/Game";
 
 interface BoardProps {
   configuration: GridConfiguration;
@@ -11,7 +11,7 @@ interface BoardProps {
   goal: GridPosition | null;
 }
 
-const Board = (props: BoardProps) => {
+export const Board: React.FC<BoardProps> = props => {
   return (
     <div
       style={{
@@ -32,21 +32,23 @@ const Board = (props: BoardProps) => {
                 ? props.goal.column === x && props.goal.row === y
                 : false
             }
+            isDestination={
+              props.moveDestinations?.filter(
+                obj => obj.row === y && obj.column === x
+              ).length !== 0
+            }
             selected={
               (props.selectedTile || false) &&
               props.selectedTile.column === x &&
               props.selectedTile.row === y
             }
-            moveDestinations={props.moveDestinations || []}
             hardMode={props.hardMode}
             handleMoveSelectedTile={props.handleMoveSelectedTile}
             setSelectedTile={props.setSelectedTile}
-            key={x * y + x}
+            key={x + y * row.length}
           />
         ))
       )}
     </div>
   );
 };
-
-export default Board;

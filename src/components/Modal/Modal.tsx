@@ -1,13 +1,17 @@
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
 
-export interface ModalProps extends React.HTMLProps<HTMLDivElement> {
-  isShown?: boolean;
-}
+type ModalProps = {
+  isShown: boolean;
+  children: React.ReactNode;
+  onClick: React.MouseEventHandler;
+};
 
-export const Modal: React.FC<ModalProps> = ({ isShown, ...props }) => {
-  const { children, ...rest } = props;
-
+export const Modal: React.FC<ModalProps> = ({
+  isShown,
+  children,
+  ...props
+}) => {
   return (
     <div
       className={twMerge(
@@ -18,11 +22,9 @@ export const Modal: React.FC<ModalProps> = ({ isShown, ...props }) => {
           }
         )
       )}
-      {...rest}
+      {...props}
     >
       {children}
     </div>
   );
 };
-
-export default Modal;

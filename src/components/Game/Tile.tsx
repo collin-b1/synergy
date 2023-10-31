@@ -1,9 +1,8 @@
-import { GridPosition } from "@/lib/types";
+import { GridPosition } from "@/types";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
-import { useEffect, useState } from "react";
-import { TileColors } from "@/lib/constants";
-import { Tile as TileValue } from "@/lib/types";
+import { TileColors } from "@/constants";
+import { Tile as TileValue } from "@/types";
 
 interface TileProps {
   posX: number;
@@ -11,33 +10,23 @@ interface TileProps {
   value: number;
   selected: boolean;
   isGoal: boolean;
-  moveDestinations: Array<GridPosition>;
+  isDestination: boolean;
   hardMode?: boolean;
   handleMoveSelectedTile?: (destination: GridPosition) => void;
   setSelectedTile: React.Dispatch<React.SetStateAction<GridPosition | null>>;
 }
 
-const Tile = (props: TileProps) => {
-  const [isDestination, setIsDestination] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (
-      props.moveDestinations.filter(
-        obj => obj.row === props.posY && obj.column === props.posX
-      ).length !== 0
-    ) {
-      setIsDestination(true);
-    } else {
-      setIsDestination(false);
-    }
-  }, [props.posX, props.posY, props.moveDestinations]);
-
+export const Tile = (props: TileProps) => {
   const handleClick = () => {
     props.setSelectedTile(() => {
-      if (props.handleMoveSelectedTile && isDestination && !props.selected) {
+      if (
+        props.handleMoveSelectedTile &&
+        props.isDestination &&
+        !props.selected
+      ) {
         props.handleMoveSelectedTile({ row: props.posY, column: props.posX });
-      } else if (!props.selected) {
-        return { column: props.posX, row: props.posY };
+      } else if (props.selected) {
+        return null;
       }
       return { row: props.posY, column: props.posX };
     });
@@ -51,7 +40,7 @@ const Tile = (props: TileProps) => {
           TileColors.get(props.value),
           {
             "ring-4 ring-blue-500 ring-inset": props.selected,
-            "flex justify-center items-center": isDestination,
+            "flex justify-center items-center": props.isDestination,
             "ring-2 ring-purple-600": props.isGoal,
             "bg-portal bg-cover":
               props.isGoal && props.value === TileValue.EMPTY,
@@ -61,11 +50,11 @@ const Tile = (props: TileProps) => {
       onClick={handleClick}
       role="gridcell"
     >
-      {isDestination && !props.hardMode ? (
+      {props.isDestination && !props.hardMode ? (
         <div
           className={twMerge(
             clsx(
-              "absolute rounded-full bg-black/25 p-1 backdrop-blur-lg dark:bg-white/25 sm:p-2",
+              "absolute rounded-full bg-black/25 p-2 backdrop-blur-lg dark:bg-white/25",
               { "bg-black dark:bg-black": props.isGoal }
             )
           )}
@@ -76,5 +65,3 @@ const Tile = (props: TileProps) => {
     </button>
   );
 };
-
-export default Tile;
