@@ -1,54 +1,17 @@
-import type { GridConfiguration, GridPosition } from "@/lib/types";
-import { useEffect, useState } from "react";
-import Tile from "./Tile";
-import { getDestinationTiles, moveTile } from "@/utils/boardActions";
+import type { GridConfiguration, GridPosition } from "@/types";
+import { Tile } from "@/components/Game";
 
 interface BoardProps {
   configuration: GridConfiguration;
+  moveDestinations?: Array<GridPosition> | null;
+  hardMode?: boolean;
   selectedTile: GridPosition | null;
   setSelectedTile: React.Dispatch<React.SetStateAction<GridPosition | null>>;
-  handleMove?: () => void;
-  handleLevelWin?: () => void;
-  wonLevel?: boolean;
+  handleMoveSelectedTile?: (destination: GridPosition) => void;
   goal: GridPosition | null;
 }
 
-const Board = (props: BoardProps) => {
-  const [moveDestinations, setMoveDestinations] = useState<Array<GridPosition>>(
-    []
-  );
-
-  const handleMoveSelectedTile = (destination: GridPosition) => {
-    if (props.selectedTile && !props.wonLevel) {
-      const moved = moveTile(
-        props.configuration,
-        props.selectedTile,
-        destination
-      );
-      if (
-        moved.column === destination.column &&
-        moved.row === destination.row
-      ) {
-        if (props.handleMove) props.handleMove();
-        if (
-          props.goal &&
-          props.configuration[props.goal.row][props.goal.column] === 3
-        ) {
-          if (props.handleLevelWin) props.handleLevelWin();
-          //window.alert("You win!\n(More satisfying win alert coming soon...)");
-        }
-      }
-    }
-  };
-
-  useEffect(() => {
-    setMoveDestinations(() =>
-      props.selectedTile && !props.wonLevel
-        ? getDestinationTiles(props.configuration, props.selectedTile)
-        : []
-    );
-  }, [props.configuration, props.selectedTile, props.wonLevel]);
-
+export const Board: React.FC<BoardProps> = props => {
   return (
     <div
       style={{
@@ -69,20 +32,23 @@ const Board = (props: BoardProps) => {
                 ? props.goal.column === x && props.goal.row === y
                 : false
             }
+            isDestination={
+              props.moveDestinations?.filter(
+                obj => obj.row === y && obj.column === x
+              ).length !== 0
+            }
             selected={
               (props.selectedTile || false) &&
               props.selectedTile.column === x &&
               props.selectedTile.row === y
             }
-            moveDestinations={moveDestinations}
-            handleMoveSelectedTile={handleMoveSelectedTile}
+            hardMode={props.hardMode}
+            handleMoveSelectedTile={props.handleMoveSelectedTile}
             setSelectedTile={props.setSelectedTile}
-            key={x * y + x}
+            key={x + y * row.length}
           />
         ))
       )}
     </div>
   );
 };
-
-export default Board;

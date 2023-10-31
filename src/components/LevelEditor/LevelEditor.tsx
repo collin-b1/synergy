@@ -1,19 +1,19 @@
 import { ChangeEvent, useEffect, useState } from "react";
-import Board from "@/components/Game/Board";
+import { Board } from "@/components/Game";
 import {
   createEmptyConfiguration,
   decodeLevelString,
   encodeLevelString,
 } from "@/utils/boardActions";
-import { GameLevel, GridPosition } from "@/lib/types";
-import Button from "../Button";
-import { LEVEL } from "@/lib/constants";
+import { GameLevel, GridPosition } from "@/types";
+import { Button } from "@/components/Button";
+import { LEVEL } from "@/constants";
 
 interface LevelEditorProps {
   code: string | undefined;
 }
 
-const LevelEditor: React.FC<LevelEditorProps> = props => {
+export const LevelEditor: React.FC<LevelEditorProps> = props => {
   // Level Details
   const [selectedTile, setSelectedTile] = useState<GridPosition | null>(null);
   const [levelProperties, setLevelProperties] = useState<GameLevel>({
@@ -240,5 +240,3 @@ const LevelEditor: React.FC<LevelEditorProps> = props => {
     </div>
   );
 };
-
-export default LevelEditor;

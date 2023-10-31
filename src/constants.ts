@@ -28,13 +28,23 @@ export const DESTINATION_TILES: TileSet = [
   Tile.WALL,
   Tile.PLAYER,
   Tile.STICKY,
+  Tile.POWERED,
 ];
 
 // Tiles which prevent futher movement beyond itself
-export const SOLID_TILES: TileSet = [Tile.OBSTACLE, Tile.WALL, Tile.PLAYER];
+export const SOLID_TILES: TileSet = [
+  Tile.OBSTACLE,
+  Tile.WALL,
+  Tile.PLAYER,
+  Tile.POWERED,
+];
 
 // Tiles which can be moved
-export const MOVABLE_TILES: TileSet = [Tile.OBSTACLE, Tile.PLAYER];
+export const MOVABLE_TILES: TileSet = [
+  Tile.OBSTACLE,
+  Tile.PLAYER,
+  Tile.POWERED,
+];
 
 export const TileColors = new Map<Tile, string>([
   [Tile.EMPTY, "bg-gray-300 dark:bg-slate-700"],
@@ -42,4 +52,5 @@ export const TileColors = new Map<Tile, string>([
   [Tile.OBSTACLE, "bg-gray-600 dark:bg-gray-200"],
   [Tile.PLAYER, "bg-red-400"],
   [Tile.STICKY, "bg-green-400"],
+  [Tile.POWERED, "bg-blue-700"],
 ]);

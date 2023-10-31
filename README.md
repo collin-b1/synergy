@@ -4,7 +4,7 @@ Synergy is a puzzle game based on the classic "Lunar Landing" puzzle by [Binary 
 
 ## Game Objective
 
-The goal of the game is to move the player onto the portal tile. The player may only move in the cardinal directions, and must continue to move until he runs into an obstacle. The player may not move off the grid or make any partial movements. Obstacles may also be moved in the same fashion as the player, and follow the same movement rules.
+The goal of the game is to move the player onto the portal tile. The player may only move in the cardinal directions, and must continue to move until they run into an obstacle. The player may not move off the grid or make any partial movements. Obstacles may also be moved in the same fashion as the player, and follow the same movement rules.
 
 Obstacles may be placed on top of the portal tile, but will not count as completion. Additionally, the player must land directly on top of the portal to trigger a win; moving over the portal is not enough.
 
@@ -14,20 +14,20 @@ Obstacles may be placed on top of the portal tile, but will not count as complet
 
 1. Clone the repository
 
-```
+```sh
 $ git clone https://github.com/collin-b1/synergy.git
 $ cd synergy
 ```
 
 2. Install dependencies
 
-```
+```sh
 $ npm install
 ```
 
 3. Run developer environment
 
-```
+```sh
 $ npm run dev
 ```
 

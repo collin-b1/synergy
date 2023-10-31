@@ -1,5 +1,5 @@
-import { MOVABLE_TILES, SOLID_TILES, DESTINATION_TILES } from "@/lib/constants";
-import { GameLevel, GridConfiguration, GridPosition, Tile } from "@/lib/types";
+import { MOVABLE_TILES, SOLID_TILES, DESTINATION_TILES } from "@/constants";
+import { GameLevel, GridConfiguration, GridPosition, Tile } from "@/types";
 
 /**
  * Returns an x by y matrix filled with zeros.

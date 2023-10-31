@@ -1,4 +1,4 @@
-import { GameLevel } from "@/lib/types";
+import type { GameLevel } from "@/types";
 
 const levels: Array<GameLevel> = [
   {
