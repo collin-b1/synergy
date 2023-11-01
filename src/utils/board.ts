@@ -23,11 +23,9 @@ export const isMovableTile = (tile: Tile) => MOVABLE_TILES.includes(tile);
 /**
  * Returns an array of possible destination tile positions for a selected tile
  *
- * @todo Refactor code to make less redundant, possibly split into multiple functions
- *
  * @param board - The board to check against
  * @param tilePos - Position of the tile to check
- * @returns
+ * @returns Array of playable GridPositions
  */
 export const getDestinationTiles = (
   board: GridConfiguration,
@@ -93,22 +91,30 @@ export const getDestinationTiles = (
   return destinations;
 };
 
+/**
+ *
+ * @param board - The original board state
+ * @param tile - The tile to move
+ * @param destination - The desired destination
+ * @returns New board configuration if allowed, null if not
+ */
 export const moveTile = (
   board: GridConfiguration,
   tile: GridPosition,
   destination: GridPosition
-): GridPosition => {
-  const checkDestinationTiles =
-    getDestinationTiles(board, tile).filter(
-      pos => pos.row === destination.row && pos.column === destination.column
-    ).length !== 0;
-
-  if (checkDestinationTiles) {
-    board[destination.row][destination.column] = board[tile.row][tile.column];
-    board[tile.row][tile.column] = Tile.EMPTY;
-    return destination;
+): GridConfiguration | null => {
+  const destinationTiles = getDestinationTiles(board, tile);
+  if (
+    destinationTiles.some(
+      d => d.column === destination.column && d.row === destination.row
+    )
+  ) {
+    const clone = structuredClone(board);
+    clone[destination.row][destination.column] = clone[tile.row][tile.column];
+    clone[tile.row][tile.column] = Tile.EMPTY;
+    return clone;
   }
-  return tile;
+  return null;
 };
 
 export const encodeLevelString = (level: GameLevel): string | undefined => {

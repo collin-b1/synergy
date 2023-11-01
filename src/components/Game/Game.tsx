@@ -17,12 +17,14 @@ import {
   decodeLevelString,
   getDestinationTiles,
   moveTile,
-} from "@/utils/boardActions";
+} from "@/utils/board";
 import { LEVEL } from "@/constants";
 
 interface GameProps {
   code: string | undefined;
 }
+
+type ModalScreen = "win" | "settings" | null;
 
 export const Game: React.FC<GameProps> = props => {
   const [userSettings, setUserSettings] = useState<UserSettings>({
@@ -37,7 +39,7 @@ export const Game: React.FC<GameProps> = props => {
     moves: [],
     time: 0,
   });
-  const [modal, setModal] = useState<null | "win" | "settings">(null);
+  const [modal, setModal] = useState<ModalScreen>(null);
   // These properties do not change except for per level
   const [levelProperties, setLevelProperties] = useState<GameLevel>({
     startingConfiguration: createEmptyConfiguration(
@@ -57,7 +59,6 @@ export const Game: React.FC<GameProps> = props => {
   );
 
   const [selectedTile, setSelectedTile] = useState<GridPosition | null>(null);
-  const [isUserLevel, setIsUserLevel] = useState<boolean>(false);
 
   useEffect(() => {
     setMoveDestinations(() =>
@@ -74,12 +75,13 @@ export const Game: React.FC<GameProps> = props => {
   useEffect(() => {
     const code = props.code;
     if (code === undefined) {
-      setIsUserLevel(false);
-      setLevelProperties(() => getLevel(levelNumber));
+      if (levelNumber != -1) {
+        setLevelProperties(() => getLevel(levelNumber));
+      }
     } else {
       const level: GameLevel | undefined = decodeLevelString(code);
       if (level !== undefined) {
-        setIsUserLevel(true);
+        setLevelNumber(-1);
         setLevelProperties(() => level);
       }
     }
@@ -122,25 +124,18 @@ export const Game: React.FC<GameProps> = props => {
   };
 
   const handleMoveSelectedTile = (destination: GridPosition) => {
-    // Clone of the current configuration so that we aren't directly modifying state
-    const cloneBoard = structuredClone(configuration);
-    const selected = selectedTile;
-
-    if (selected && !levelStats.completed) {
-      const moved = moveTile(cloneBoard, selected, destination);
-      if (
-        moved.column === destination.column &&
-        moved.row === destination.row
-      ) {
-        setConfiguration(() => cloneBoard);
+    if (selectedTile && !levelStats.completed) {
+      const moved = moveTile(configuration, selectedTile, destination);
+      if (moved !== null) {
+        setConfiguration(moved);
         setLevelStats(stats => ({
           ...stats,
-          moves: [...stats.moves, [selected, destination]],
+          moves: [...stats.moves, [selectedTile, destination]],
         }));
 
         if (
           levelProperties.goal &&
-          cloneBoard[levelProperties.goal.row][levelProperties.goal.column] ===
+          moved[levelProperties.goal.row][levelProperties.goal.column] ===
             Tile.PLAYER
         ) {
           setLevelStats(stats => ({
@@ -236,7 +231,7 @@ export const Game: React.FC<GameProps> = props => {
               resetLevelStats();
               setLevelNumber(num => num - 1);
             }}
-            disabled={levelNumber === 0 || isUserLevel}
+            disabled={levelNumber === 0 || levelNumber === -1}
           >
             ◁
           </Button>
@@ -251,7 +246,7 @@ export const Game: React.FC<GameProps> = props => {
               resetLevelStats();
               setLevelNumber(num => num + 1);
             }}
-            disabled={levelNumber === levelCount - 1 || isUserLevel}
+            disabled={levelNumber === levelCount - 1 || levelNumber === -1}
           >
             ▷
           </Button>

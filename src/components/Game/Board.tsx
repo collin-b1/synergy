@@ -33,9 +33,9 @@ export const Board: React.FC<BoardProps> = props => {
                 : false
             }
             isDestination={
-              props.moveDestinations?.filter(
+              props.moveDestinations?.some(
                 obj => obj.row === y && obj.column === x
-              ).length !== 0
+              ) || false
             }
             selected={
               (props.selectedTile || false) &&
