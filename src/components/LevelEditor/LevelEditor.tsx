@@ -4,7 +4,7 @@ import {
   createEmptyConfiguration,
   decodeLevelString,
   encodeLevelString,
-} from "@/utils/game";
+} from "@/utils";
 import { GameLevel, GridPosition } from "@/types";
 import { Button } from "@/components/Button";
 import CONSTANTS from "@/constants";

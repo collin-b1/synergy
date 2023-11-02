@@ -4,7 +4,7 @@ import { Modal, ModalScreen } from "@/components/Modal";
 import { Toggle } from "@/components/Toggle";
 import { Button } from "@/components/Button";
 import { type GridPosition } from "@/types";
-import { decodeLevelString, getDestinationTiles } from "@/utils/game";
+import { decodeLevelString, getDestinationTiles } from "@/utils";
 import { useSynergyStore } from "@/lib/store";
 
 interface GameProps {
