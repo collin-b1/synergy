@@ -240,8 +240,8 @@ const getLevelCount = (): number => {
   return levels.length;
 };
 
-const getLevel = (levelNumber: number): Readonly<GameLevel> => {
-  return Object.freeze(levels[levelNumber]) || {};
+const getLevels = (): Array<GameLevel> => {
+  return levels;
 };
 
-export { getLevel, getLevelCount };
+export { getLevels, getLevelCount };

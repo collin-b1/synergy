@@ -1,35 +1,31 @@
-import { GridPosition } from "@/types";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
-import { TileColors } from "@/constants";
+import { useSynergyStore } from "@/lib/store";
+import CONSTANTS from "@/constants";
 import { Tile as TileValue } from "@/types";
 
 interface TileProps {
-  posX: number;
-  posY: number;
-  value: number;
-  selected: boolean;
+  value: TileValue;
+  row: number;
+  column: number;
   isGoal: boolean;
   isDestination: boolean;
-  hardMode?: boolean;
-  handleMoveSelectedTile?: (destination: GridPosition) => void;
-  setSelectedTile: React.Dispatch<React.SetStateAction<GridPosition | null>>;
+  isSelected: boolean;
 }
 
 export const Tile = (props: TileProps) => {
-  const handleClick = () => {
-    props.setSelectedTile(() => {
-      if (
-        props.handleMoveSelectedTile &&
-        props.isDestination &&
-        !props.selected
-      ) {
-        props.handleMoveSelectedTile({ row: props.posY, column: props.posX });
-      } else if (props.selected) {
-        return null;
-      }
-      return { row: props.posY, column: props.posX };
-    });
+  const { row, column } = props;
+
+  const setSelectedTile = useSynergyStore(state => state.selectTile);
+  const moveSelected = useSynergyStore(state => state.moveSelected);
+  const hardMode = useSynergyStore(state => state.hardMode);
+
+  const handleSelectTile = () => {
+    if (!props.isDestination) {
+      setSelectedTile({ row, column });
+    } else {
+      moveSelected({ row, column });
+    }
   };
 
   return (
@@ -37,9 +33,9 @@ export const Tile = (props: TileProps) => {
       className={twMerge(
         clsx(
           "aspect-square rounded transition-[ring] delay-0 ease-linear active:ring-2 motion-reduce:transition-none",
-          TileColors.get(props.value),
+          CONSTANTS.TILE_COLORS.get(props.value),
           {
-            "ring-4 ring-blue-500 ring-inset": props.selected,
+            "ring-4 ring-blue-500 ring-inset": props.isSelected,
             "flex justify-center items-center": props.isDestination,
             "ring-2 ring-purple-600": props.isGoal,
             "bg-portal bg-cover":
@@ -47,10 +43,10 @@ export const Tile = (props: TileProps) => {
           }
         )
       )}
-      onClick={handleClick}
+      onClick={handleSelectTile}
       role="gridcell"
     >
-      {props.isDestination && !props.hardMode ? (
+      {!hardMode && props.isDestination ? (
         <div
           className={twMerge(
             clsx(
