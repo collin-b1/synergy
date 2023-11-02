@@ -4,10 +4,11 @@ import {
   createEmptyConfiguration,
   decodeLevelString,
   encodeLevelString,
-} from "@/utils/boardActions";
+} from "@/utils/game";
 import { GameLevel, GridPosition } from "@/types";
 import { Button } from "@/components/Button";
-import { LEVEL } from "@/constants";
+import CONSTANTS from "@/constants";
+import { useSynergyStore } from "@/lib/store";
 
 interface LevelEditorProps {
   code: string | undefined;
@@ -15,17 +16,19 @@ interface LevelEditorProps {
 
 export const LevelEditor: React.FC<LevelEditorProps> = props => {
   // Level Details
-  const [selectedTile, setSelectedTile] = useState<GridPosition | null>(null);
+  const selectedTile = useSynergyStore(state => state.selected);
+  const overrideGoal = useSynergyStore(state => state.overrideGoal);
+
   const [levelProperties, setLevelProperties] = useState<GameLevel>({
     startingConfiguration: createEmptyConfiguration(
-      LEVEL.DEFAULT_ROWS,
-      LEVEL.DEFAULT_COLUMNS
+      CONSTANTS.LEVEL.DEFAULT_ROWS,
+      CONSTANTS.LEVEL.DEFAULT_COLUMNS
     ),
-    author: LEVEL.DEFAULT_AUTHOR,
-    name: LEVEL.DEFAULT_NAME,
+    author: CONSTANTS.LEVEL.DEFAULT_AUTHOR,
+    name: CONSTANTS.LEVEL.DEFAULT_NAME,
     goal: {
-      row: LEVEL.DEFAULT_GOAL_ROW,
-      column: LEVEL.DEFAULT_GOAL_COLUMN,
+      row: CONSTANTS.LEVEL.DEFAULT_GOAL_ROW,
+      column: CONSTANTS.LEVEL.DEFAULT_GOAL_COLUMN,
     },
   });
 
@@ -55,7 +58,10 @@ export const LevelEditor: React.FC<LevelEditorProps> = props => {
 
   const handleChangeColumns = (e: ChangeEvent<HTMLInputElement>) => {
     const columns: number = parseInt(e.target.value);
-    if (columns >= LEVEL.MIN_COLUMNS && columns <= LEVEL.MAX_COLUMNS) {
+    if (
+      columns >= CONSTANTS.LEVEL.MIN_COLUMNS &&
+      columns <= CONSTANTS.LEVEL.MAX_COLUMNS
+    ) {
       setStartingConfiguration(
         levelProperties.startingConfiguration.length,
         columns
@@ -65,7 +71,7 @@ export const LevelEditor: React.FC<LevelEditorProps> = props => {
 
   const handleChangeRows = (e: ChangeEvent<HTMLInputElement>) => {
     const rows: number = parseInt(e.target.value);
-    if (rows >= LEVEL.MIN_ROWS && rows <= LEVEL.MAX_ROWS) {
+    if (rows >= CONSTANTS.LEVEL.MIN_ROWS && rows <= CONSTANTS.LEVEL.MAX_ROWS) {
       setStartingConfiguration(
         rows,
         levelProperties.startingConfiguration[0].length
@@ -87,11 +93,12 @@ export const LevelEditor: React.FC<LevelEditorProps> = props => {
     }));
   };
 
-  const setGoal = (tile: GridPosition | null) => {
+  const setGoal = (tile: GridPosition) => {
     setLevelProperties(levelProperties => ({
       ...levelProperties,
       goal: tile,
     }));
+    overrideGoal(tile);
   };
 
   const insertTile = (tile: GridPosition, tileType: number) => {
@@ -108,13 +115,8 @@ export const LevelEditor: React.FC<LevelEditorProps> = props => {
       <h1 className="text-center text-2xl font-bold text-white">
         Level Editor
       </h1>
-      <div className="mb-2">
-        <Board
-          configuration={levelProperties.startingConfiguration}
-          selectedTile={selectedTile}
-          setSelectedTile={setSelectedTile}
-          goal={levelProperties.goal || null}
-        />
+      <div className="mb-2 flex-1">
+        <Board board={levelProperties.startingConfiguration} />
       </div>
 
       <div className="mt-2 flex flex-1 flex-col">
@@ -183,8 +185,8 @@ export const LevelEditor: React.FC<LevelEditorProps> = props => {
             <input
               type="text"
               name="levelName"
-              maxLength={LEVEL.MAX_NAME_LENGTH}
-              value={levelProperties.name}
+              maxLength={CONSTANTS.LEVEL.MAX_NAME_LENGTH}
+              defaultValue={levelProperties.name}
               onChange={handleChangeName}
               className="rounded border-b p-1 dark:bg-slate-800"
             />
@@ -194,8 +196,8 @@ export const LevelEditor: React.FC<LevelEditorProps> = props => {
             <input
               type="text"
               name="levelAuthor"
-              maxLength={LEVEL.MAX_AUTHOR_LENGTH}
-              value={levelProperties.author}
+              maxLength={CONSTANTS.LEVEL.MAX_AUTHOR_LENGTH}
+              defaultValue={levelProperties.author}
               onChange={handleChangeAuthor}
               className="rounded border-b p-1 dark:bg-slate-800"
             />
@@ -208,9 +210,9 @@ export const LevelEditor: React.FC<LevelEditorProps> = props => {
             <input
               type="number"
               name="rows"
-              min={LEVEL.MIN_ROWS}
-              max={LEVEL.MAX_ROWS}
-              value={levelProperties.startingConfiguration.length}
+              min={CONSTANTS.LEVEL.MIN_ROWS}
+              max={CONSTANTS.LEVEL.MAX_ROWS}
+              defaultValue={levelProperties.startingConfiguration.length}
               onChange={handleChangeRows}
               className="rounded border-b p-1 dark:bg-slate-800"
             />
@@ -222,9 +224,9 @@ export const LevelEditor: React.FC<LevelEditorProps> = props => {
             <input
               type="number"
               name="columns"
-              min={LEVEL.MIN_COLUMNS}
-              max={LEVEL.MAX_COLUMNS}
-              value={levelProperties.startingConfiguration[0].length}
+              min={CONSTANTS.LEVEL.MIN_COLUMNS}
+              max={CONSTANTS.LEVEL.MAX_COLUMNS}
+              defaultValue={levelProperties.startingConfiguration[0].length}
               onChange={handleChangeColumns}
               className="rounded border-b p-1 dark:bg-slate-800"
             />
@@ -232,7 +234,7 @@ export const LevelEditor: React.FC<LevelEditorProps> = props => {
         </div>
         <h2 className="mt-4 text-xl font-bold dark:text-white">Share</h2>
         <input
-          value={shareLink}
+          defaultValue={shareLink}
           onClick={e => e.currentTarget.select()}
           className="mt-2 rounded border-b p-1 dark:bg-slate-800"
         />

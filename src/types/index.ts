@@ -21,7 +21,7 @@ export interface GameLevel {
   startingConfiguration: GridConfiguration;
 
   /** Custom goal position */
-  goal?: GridPosition | null;
+  goal?: GridPosition;
 
   /** Name of the level */
   name?: string;
@@ -33,19 +33,7 @@ export interface GameLevel {
   description?: string;
 
   /** Number of moves per star reward from least to greatest */
-  moveTiers?: [number, number];
-}
-
-export interface LevelStats {
-  completed: boolean;
-  time: number;
-  moves: Array<[GridPosition, GridPosition]>;
-  attempts: number;
-}
-
-export interface UserSettings {
-  hardMode: boolean;
-  saveGameData: boolean;
+  min?: [number, number];
 }
 
 export interface LevelQueryParameters {

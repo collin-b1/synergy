@@ -1,7 +1,7 @@
 import { Route, Routes, useLocation, useSearchParams } from "react-router-dom";
 import { Game } from "@/components/Game";
-import { LevelEditor } from "@/components/LevelEditor";
 import { Link } from "@/components/Link";
+import { LevelEditor } from "./LevelEditor";
 
 function App() {
   const { pathname } = useLocation();
@@ -16,12 +16,14 @@ function App() {
             path="/"
             element={<Game code={searchParams.get("code") || undefined} />}
           />
-          <Route
-            path="/editor"
-            element={
-              <LevelEditor code={searchParams.get("code") || undefined} />
-            }
-          />
+          {
+            <Route
+              path="/editor"
+              element={
+                <LevelEditor code={searchParams.get("code") || undefined} />
+              }
+            />
+          }
         </Routes>
       </main>
       <footer className="mx-auto max-w-md p-2">

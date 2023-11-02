@@ -1,7 +1,7 @@
 import { Tile } from "./types";
 import type { TileSet } from "./types";
 
-export const LEVEL = {
+const LEVEL = {
   MIN_ROWS: 3,
   MAX_ROWS: 15,
   DEFAULT_ROWS: 5,
@@ -23,7 +23,7 @@ export const LEVEL = {
 } as const;
 
 // Tiles which create a destination when approached
-export const DESTINATION_TILES: TileSet = [
+const DESTINATION_TILES: TileSet = [
   Tile.OBSTACLE,
   Tile.WALL,
   Tile.PLAYER,
@@ -32,7 +32,7 @@ export const DESTINATION_TILES: TileSet = [
 ];
 
 // Tiles which prevent futher movement beyond itself
-export const SOLID_TILES: TileSet = [
+const SOLID_TILES: TileSet = [
   Tile.OBSTACLE,
   Tile.WALL,
   Tile.PLAYER,
@@ -40,13 +40,9 @@ export const SOLID_TILES: TileSet = [
 ];
 
 // Tiles which can be moved
-export const MOVABLE_TILES: TileSet = [
-  Tile.OBSTACLE,
-  Tile.PLAYER,
-  Tile.POWERED,
-];
+const MOVABLE_TILES: TileSet = [Tile.OBSTACLE, Tile.PLAYER, Tile.POWERED];
 
-export const TileColors = new Map<Tile, string>([
+const TILE_COLORS = new Map<Tile, string>([
   [Tile.EMPTY, "bg-gray-300 dark:bg-slate-700"],
   [Tile.WALL, "bg-gray-800"],
   [Tile.OBSTACLE, "bg-gray-600 dark:bg-gray-200"],
@@ -54,3 +50,13 @@ export const TileColors = new Map<Tile, string>([
   [Tile.STICKY, "bg-green-400"],
   [Tile.POWERED, "bg-blue-700"],
 ]);
+
+const CONSTANTS = {
+  LEVEL,
+  DESTINATION_TILES,
+  MOVABLE_TILES,
+  SOLID_TILES,
+  TILE_COLORS,
+} as const;
+
+export default CONSTANTS;

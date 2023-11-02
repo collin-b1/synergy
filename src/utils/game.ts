@@ -1,4 +1,4 @@
-import { MOVABLE_TILES, SOLID_TILES, DESTINATION_TILES } from "@/constants";
+import CONSTANTS from "@/constants";
 import { GameLevel, GridConfiguration, GridPosition, Tile } from "@/types";
 
 /**
@@ -16,9 +16,10 @@ export const createEmptyConfiguration = (
 };
 
 export const isDestinationTile = (tile: Tile) =>
-  DESTINATION_TILES.includes(tile);
-export const isSolidTile = (tile: Tile) => SOLID_TILES.includes(tile);
-export const isMovableTile = (tile: Tile) => MOVABLE_TILES.includes(tile);
+  CONSTANTS.DESTINATION_TILES.includes(tile);
+export const isSolidTile = (tile: Tile) => CONSTANTS.SOLID_TILES.includes(tile);
+export const isMovableTile = (tile: Tile) =>
+  CONSTANTS.MOVABLE_TILES.includes(tile);
 
 /**
  * Returns an array of possible destination tile positions for a selected tile
@@ -93,22 +94,31 @@ export const getDestinationTiles = (
   return destinations;
 };
 
+export const hasWon = (
+  board: GridConfiguration,
+  goal: GridPosition
+): boolean => {
+  return board[goal.row][goal.column] === Tile.PLAYER;
+};
+
 export const moveTile = (
   board: GridConfiguration,
   tile: GridPosition,
   destination: GridPosition
-): GridPosition => {
+): GridConfiguration | null => {
   const checkDestinationTiles =
     getDestinationTiles(board, tile).filter(
       pos => pos.row === destination.row && pos.column === destination.column
     ).length !== 0;
 
   if (checkDestinationTiles) {
-    board[destination.row][destination.column] = board[tile.row][tile.column];
-    board[tile.row][tile.column] = Tile.EMPTY;
-    return destination;
+    const newBoard = structuredClone(board);
+    newBoard[destination.row][destination.column] =
+      board[tile.row][tile.column];
+    newBoard[tile.row][tile.column] = Tile.EMPTY;
+    return newBoard;
   }
-  return tile;
+  return null;
 };
 
 export const encodeLevelString = (level: GameLevel): string | undefined => {

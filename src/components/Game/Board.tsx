@@ -1,51 +1,46 @@
 import type { GridConfiguration, GridPosition } from "@/types";
 import { Tile } from "@/components/Game";
+import { useSynergyStore } from "@/lib/store";
 
 interface BoardProps {
-  configuration: GridConfiguration;
-  moveDestinations?: Array<GridPosition> | null;
-  hardMode?: boolean;
-  selectedTile: GridPosition | null;
-  setSelectedTile: React.Dispatch<React.SetStateAction<GridPosition | null>>;
-  handleMoveSelectedTile?: (destination: GridPosition) => void;
-  goal: GridPosition | null;
+  board: GridConfiguration;
+  moveDestinations?: Array<GridPosition>;
 }
 
-export const Board: React.FC<BoardProps> = props => {
+export const Board: React.FC<BoardProps> = ({ board, moveDestinations }) => {
+  const goal = useSynergyStore(state => state.level.goal);
+  const selected = useSynergyStore(state => state.selected);
+
   return (
     <div
       style={{
-        gridTemplateColumns: `repeat(${props.configuration[0].length}, 1fr)`,
-        gridTemplateRows: `repeat(${props.configuration.length}, 1fr)`,
+        gridTemplateColumns: `repeat(${board[0].length}, 1fr)`,
+        gridTemplateRows: `repeat(${board.length}, 1fr)`,
       }}
-      className={`grid select-none gap-1`}
+      className={`grid select-none grid-flow-dense gap-1`}
       role="grid"
     >
-      {props.configuration.map((row, y) =>
-        row.map((val, x) => (
+      {board.map((rows, row) =>
+        rows.map((val, column) => (
           <Tile
-            posX={x}
-            posY={y}
             value={val}
             isGoal={
-              props.goal
-                ? props.goal.column === x && props.goal.row === y
-                : false
+              goal !== undefined && goal.row === row && goal.column === column
+            }
+            isSelected={
+              selected !== null &&
+              selected.row === row &&
+              selected.column === column
             }
             isDestination={
-              props.moveDestinations?.filter(
-                obj => obj.row === y && obj.column === x
-              ).length !== 0
+              moveDestinations !== undefined &&
+              moveDestinations.some(
+                dest => dest.row === row && dest.column === column
+              )
             }
-            selected={
-              (props.selectedTile || false) &&
-              props.selectedTile.column === x &&
-              props.selectedTile.row === y
-            }
-            hardMode={props.hardMode}
-            handleMoveSelectedTile={props.handleMoveSelectedTile}
-            setSelectedTile={props.setSelectedTile}
-            key={x + y * row.length}
+            row={row}
+            column={column}
+            key={column + row * rows.length}
           />
         ))
       )}
