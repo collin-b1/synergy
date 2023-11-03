@@ -2,10 +2,11 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { Board } from "@/components/Game";
 import { createEmptyConfiguration, encodeLevelString } from "@/utils";
 
-import { GameLevel, GridPosition } from "@/types";
+import { GameLevel, GridPosition, Tile } from "@/types";
 import { Button } from "@/components/Button";
 import CONSTANTS from "@/constants";
 import { useSynergyStore } from "@/lib/store";
+import { Link } from "react-router-dom";
 
 interface EditorProps {
   loadedLevel: GameLevel | undefined;
@@ -120,24 +121,44 @@ export const Editor: React.FC<EditorProps> = props => {
 
       <div className="mt-2 flex flex-1 flex-col">
         <h2 className="text-xl font-bold dark:text-white">Board Actions</h2>
-        <div className="flex flex-col sm:flex-row">
+        <div className="grid grid-cols-2 sm:grid-cols-4">
           <Button
             className="mr-0 mt-1 sm:mr-1 sm:mt-0"
-            onClick={() => selectedTile && insertTile(selectedTile, 3)}
+            onClick={() =>
+              selectedTile && insertTile(selectedTile, Tile.PLAYER)
+            }
           >
             Player
           </Button>
           <Button
             className="mr-0 mt-1 sm:mr-1 sm:mt-0"
-            onClick={() => selectedTile && insertTile(selectedTile, 2)}
+            onClick={() =>
+              selectedTile && insertTile(selectedTile, Tile.OBSTACLE)
+            }
           >
             Obstacle
           </Button>
           <Button
             className="mr-0 mt-1 sm:mr-1 sm:mt-0"
-            onClick={() => selectedTile && insertTile(selectedTile, 4)}
+            onClick={() => selectedTile && insertTile(selectedTile, Tile.WALL)}
+          >
+            Wall
+          </Button>
+          <Button
+            className="mr-0 mt-1 sm:mr-1 sm:mt-0"
+            onClick={() =>
+              selectedTile && insertTile(selectedTile, Tile.STICKY)
+            }
           >
             Sticky
+          </Button>
+          <Button
+            className="mr-0 mt-1 sm:mr-1 sm:mt-0"
+            onClick={() =>
+              selectedTile && insertTile(selectedTile, Tile.POWERED)
+            }
+          >
+            Powered
           </Button>
           <Button
             className="mr-0 mt-1 sm:mr-1 sm:mt-0"
@@ -147,7 +168,7 @@ export const Editor: React.FC<EditorProps> = props => {
           </Button>
           <Button
             className="mr-0 mt-1 sm:mr-1 sm:mt-0"
-            onClick={() => selectedTile && insertTile(selectedTile, 0)}
+            onClick={() => selectedTile && insertTile(selectedTile, Tile.EMPTY)}
           >
             Delete
           </Button>
@@ -159,6 +180,9 @@ export const Editor: React.FC<EditorProps> = props => {
           >
             Export
           </Button>
+          <Link to={shareLink} target={"_blank"}>
+            <Button className="mr-1 bg-blue-400">Play</Button>
+          </Link>
           <Button
             className="mr-1 bg-red-400"
             onClick={() =>

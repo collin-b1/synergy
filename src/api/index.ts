@@ -234,6 +234,19 @@ const levels: Array<GameLevel> = [
     name: "Cavern 3",
     goal: { column: 4, row: 3 },
   },
+  {
+    startingConfiguration: [
+      [0, 1, 1, 1, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 1, 5, 0],
+      [1, 3, 4, 0, 1],
+    ],
+    name: "Powered Tiles (Tutorial)",
+    goal: { row: 2, column: 2 },
+    description:
+      'Blue "Powered Tiles" may only move if they are adjacent to the player',
+  },
 ];
 
 const getLevelCount = (): number => {

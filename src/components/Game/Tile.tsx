@@ -11,6 +11,7 @@ interface TileProps {
   isGoal: boolean;
   isDestination: boolean;
   isSelected: boolean;
+  isPlayerAdjacent?: boolean;
 }
 
 export const Tile = (props: TileProps) => {
@@ -42,6 +43,8 @@ export const Tile = (props: TileProps) => {
             "ring-4 ring-blue-500 ring-inset": props.isSelected,
             "flex justify-center items-center": props.isDestination,
             "ring-2 ring-purple-600": props.isGoal,
+            "bg-blue-900":
+              props.value === TileValue.POWERED && !props.isPlayerAdjacent,
             "bg-portal bg-cover":
               props.isGoal && props.value === TileValue.EMPTY,
           }

@@ -42,11 +42,19 @@ function App() {
           <ul className="flex text-center">
             <li className="flex-1">
               {pathname !== "/" ? (
-                <Link to="/" className="text-blue-500 hover:underline">
+                <Link
+                  to="/"
+                  state={{ loadedLevel }}
+                  className="text-blue-500 hover:underline"
+                >
                   Play
                 </Link>
               ) : (
-                <Link to="/editor" className="text-blue-500 hover:underline">
+                <Link
+                  to="/editor"
+                  state={{ loadedLevel }}
+                  className="text-blue-500 hover:underline"
+                >
                   Editor
                 </Link>
               )}

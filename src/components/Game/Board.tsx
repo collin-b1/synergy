@@ -1,6 +1,7 @@
 import type { GridConfiguration, GridPosition } from "@/types";
 import { Tile } from "@/components/Game";
 import { useSynergyStore } from "@/lib/store";
+import { isPlayerAdjacent } from "@/utils";
 
 interface BoardProps {
   board: GridConfiguration;
@@ -14,7 +15,7 @@ export const Board: React.FC<BoardProps> = ({ board, moveDestinations }) => {
   return (
     <div className={`flex flex-col`} role="grid">
       {board.map((rows, row) => (
-        <div className="my-0.5 flex flex-1">
+        <div className="my-0.5 flex flex-1" key={row}>
           {rows.map((val, column) => (
             <Tile
               value={val}
@@ -32,9 +33,10 @@ export const Board: React.FC<BoardProps> = ({ board, moveDestinations }) => {
                   dest => dest.row === row && dest.column === column
                 )
               }
+              isPlayerAdjacent={isPlayerAdjacent(board, { row, column })}
               row={row}
               column={column}
-              key={column + row * rows.length}
+              key={column}
             />
           ))}
         </div>

@@ -27,7 +27,7 @@ export const Game: React.FC<GameProps> = props => {
 
   // Load user level or default levels if no level is provided
   useEffect(() => {
-    if (!props.loadedLevel) {
+    if (!props.loadedLevel || levelNumber < 0) {
       getLevels();
     } else {
       if (props.loadedLevel !== undefined) {
@@ -35,7 +35,7 @@ export const Game: React.FC<GameProps> = props => {
         setLevel(props.loadedLevel);
       }
     }
-  }, [getLevels, props.loadedLevel, setLevel]);
+  }, [getLevels, levelNumber, props.loadedLevel, setLevel]);
 
   // Set the level whenever the level number updates
   useEffect(() => {
@@ -77,7 +77,12 @@ export const Game: React.FC<GameProps> = props => {
       <div className="relative mb-4">
         <Board board={board} moveDestinations={moveDestinations} />
         <Modal isShown={modal !== null} onClick={handleClickModal}>
-          {modal === "win" && <WinModal />}
+          {modal === "win" && (
+            <WinModal
+              levelNumber={levelNumber}
+              handleNextLevel={() => setLevelNumber(num => num + 1)}
+            />
+          )}
           {modal === "settings" && <SettingsModal />}
         </Modal>
       </div>

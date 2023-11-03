@@ -1,5 +1,5 @@
 import CONSTANTS from "@/constants";
-import { GameLevel, GridConfiguration, GridPosition, Tile } from "@/types";
+import { GridConfiguration, GridPosition, Tile } from "@/types";
 
 /**
  * Returns an x by y matrix filled with zeros.
@@ -15,16 +15,20 @@ export const createEmptyConfiguration = (
   return Array.from(Array(rows), () => Array(columns).fill(0));
 };
 
-export const isDestinationTile = (tile: Tile) =>
-  CONSTANTS.DESTINATION_TILES.includes(tile);
-export const isSolidTile = (tile: Tile) => CONSTANTS.SOLID_TILES.includes(tile);
-export const isMovableTile = (tile: Tile) =>
-  CONSTANTS.MOVABLE_TILES.includes(tile);
+export const isDestinationTile = (tile: Tile): boolean => {
+  return CONSTANTS.DESTINATION_TILES.includes(tile);
+};
+export const isSolidTile = (tile: Tile): boolean => {
+  return CONSTANTS.SOLID_TILES.includes(tile);
+};
+export const isMovableTile = (tile: Tile): boolean => {
+  return CONSTANTS.MOVABLE_TILES.includes(tile);
+};
 
 /**
  * Returns an array of possible destination tile positions for a selected tile
  *
- * @todo Refactor code to make less redundant, possibly split into multiple functions
+ * @todo Make this function less stupid and redundant
  *
  * @param board - The board to check against
  * @param tilePos - Position of the tile to check
@@ -36,10 +40,13 @@ export const getDestinationTiles = (
 ): Array<GridPosition> => {
   const boardRows = board.length;
   const boardColumns = board[0].length;
+  const tile: Tile = board[tilePos.row][tilePos.column];
 
   // Check if tile is actually movable
-  const tile: Tile = board[tilePos.row][tilePos.column];
   if (!isMovableTile(tile)) return [];
+
+  // Powered tiles may only move if adjacent to a player
+  if (tile === Tile.POWERED && !isPlayerAdjacent(board, tilePos)) return [];
 
   const destinations: Array<GridPosition> = [];
 
@@ -106,36 +113,33 @@ export const moveTile = (
   tile: GridPosition,
   destination: GridPosition
 ): GridConfiguration | null => {
-  const checkDestinationTiles =
-    getDestinationTiles(board, tile).filter(
+  // Check if tile is of moveable type
+  if (isMovableTile(board[tile.row][tile.column])) {
+    // Check if tile is in destinations
+    const checkDestinationTiles = getDestinationTiles(board, tile).some(
       pos => pos.row === destination.row && pos.column === destination.column
-    ).length !== 0;
+    );
 
-  if (checkDestinationTiles) {
-    const newBoard = structuredClone(board);
-    newBoard[destination.row][destination.column] =
-      board[tile.row][tile.column];
-    newBoard[tile.row][tile.column] = Tile.EMPTY;
-    return newBoard;
+    if (checkDestinationTiles) {
+      const newBoard = structuredClone(board);
+      newBoard[destination.row][destination.column] =
+        board[tile.row][tile.column];
+      newBoard[tile.row][tile.column] = Tile.EMPTY;
+      return newBoard;
+    }
   }
   return null;
 };
 
-export const encodeLevelString = (level: GameLevel): string | undefined => {
-  try {
-    const str = JSON.stringify(level);
-    return btoa(str);
-  } catch (e) {
-    return undefined;
-  }
-};
-
-export const decodeLevelString = (code: string): GameLevel | undefined => {
-  try {
-    const decoded = atob(code);
-    const level: GameLevel = JSON.parse(decoded);
-    return level;
-  } catch (e) {
-    return undefined;
-  }
+export const isPlayerAdjacent = (
+  board: GridConfiguration,
+  tile: GridPosition
+) => {
+  const { row, column } = tile;
+  return (
+    (row > 0 && board[row - 1][column] === Tile.PLAYER) ||
+    (row < board.length - 1 && board[row + 1][column] === Tile.PLAYER) ||
+    (column > 0 && board[row][column - 1] === Tile.PLAYER) ||
+    (column < board[0].length - 1 && board[row][column + 1] === Tile.PLAYER)
+  );
 };

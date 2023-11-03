@@ -48,7 +48,7 @@ const TILE_COLORS = new Map<Tile, string>([
   [Tile.OBSTACLE, "bg-gray-600 dark:bg-gray-200"],
   [Tile.PLAYER, "bg-red-400"],
   [Tile.STICKY, "bg-green-400"],
-  [Tile.POWERED, "bg-blue-700"],
+  [Tile.POWERED, "transition-colors bg-blue-500"],
 ]);
 
 const CONSTANTS = {
