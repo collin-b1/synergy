@@ -22,7 +22,11 @@ export const Tile = (props: TileProps) => {
 
   const handleSelectTile = () => {
     if (!props.isDestination) {
-      setSelectedTile({ row, column });
+      if (props.isSelected) {
+        setSelectedTile(null);
+      } else {
+        setSelectedTile({ row, column });
+      }
     } else {
       moveSelected({ row, column });
     }

@@ -24,7 +24,9 @@ export const Modal: React.FC<ModalProps> = ({
       )}
       {...props}
     >
-      {children}
+      <div className="rounded border bg-slate-200 p-8 shadow-xl dark:border-slate-500 dark:bg-slate-800 sm:py-4">
+        {children}
+      </div>
     </div>
   );
 };

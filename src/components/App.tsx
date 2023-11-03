@@ -1,27 +1,38 @@
 import { Route, Routes, useLocation, useSearchParams } from "react-router-dom";
 import { Game } from "@/components/Game";
 import { Link } from "@/components/Link";
-import { LevelEditor } from "./LevelEditor";
+import { Editor } from "@/components/Editor";
+import { useEffect, useState } from "react";
+import { decodeLevelString } from "@/utils";
+import { GameLevel } from "@/types";
 
 function App() {
   const { pathname } = useLocation();
 
   const [searchParams] = useSearchParams();
 
+  const [loadedLevel, setLoadedLevel] = useState<GameLevel | undefined>(
+    undefined
+  );
+
+  // If a user level is provided in parameters, decode
+  useEffect(() => {
+    const code = searchParams.get("code");
+    if (code) {
+      const level = decodeLevelString(code);
+      setLoadedLevel(level);
+    }
+  }, [searchParams]);
+
   return (
     <>
       <main className="mx-auto mt-4 flex flex-row">
         <Routes>
-          <Route
-            path="/"
-            element={<Game code={searchParams.get("code") || undefined} />}
-          />
+          <Route path="/" element={<Game loadedLevel={loadedLevel} />} />
           {
             <Route
               path="/editor"
-              element={
-                <LevelEditor code={searchParams.get("code") || undefined} />
-              }
+              element={<Editor loadedLevel={loadedLevel} />}
             />
           }
         </Routes>
@@ -32,7 +43,7 @@ function App() {
             <li className="flex-1">
               {pathname !== "/" ? (
                 <Link to="/" className="text-blue-500 hover:underline">
-                  Home
+                  Play
                 </Link>
               ) : (
                 <Link to="/editor" className="text-blue-500 hover:underline">

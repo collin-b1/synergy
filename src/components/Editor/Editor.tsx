@@ -1,21 +1,17 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { Board } from "@/components/Game";
-import {
-  createEmptyConfiguration,
-  decodeLevelString,
-  encodeLevelString,
-} from "@/utils";
+import { createEmptyConfiguration, encodeLevelString } from "@/utils";
 
 import { GameLevel, GridPosition } from "@/types";
 import { Button } from "@/components/Button";
 import CONSTANTS from "@/constants";
 import { useSynergyStore } from "@/lib/store";
 
-interface LevelEditorProps {
-  code: string | undefined;
+interface EditorProps {
+  loadedLevel: GameLevel | undefined;
 }
 
-export const LevelEditor: React.FC<LevelEditorProps> = props => {
+export const Editor: React.FC<EditorProps> = props => {
   // Level Details
   const selectedTile = useSynergyStore(state => state.selected);
   const setLevel = useSynergyStore(state => state.setLevel);
@@ -35,14 +31,10 @@ export const LevelEditor: React.FC<LevelEditorProps> = props => {
 
   const [shareLink, setShareLink] = useState<string>("");
 
-  // Load level from code if present
+  // Load preloaded level if present
   useEffect(() => {
-    const { code } = props;
-    if (code !== undefined) {
-      const level: GameLevel | undefined = decodeLevelString(code);
-      if (level) {
-        setLevelProperties(() => level);
-      }
+    if (props.loadedLevel !== undefined) {
+      setLevelProperties(props.loadedLevel);
     }
   }, [props]);
 

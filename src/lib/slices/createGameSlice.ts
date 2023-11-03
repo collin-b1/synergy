@@ -15,7 +15,7 @@ export interface Game {
 
 export interface GameSlice extends Game {
   setLevel: (level: GameLevel) => void;
-  selectTile: (pos: GridPosition) => void;
+  selectTile: (pos: GridPosition | null) => void;
   moveSelected: (to: GridPosition) => void;
   toggleHardMode: () => void;
   undo: () => void;
@@ -64,6 +64,7 @@ export const createGameSlice: StateCreator<GameSlice> = (set, get) => ({
       if (newBoard !== null) {
         const goal = get().level.goal;
         set(state => ({
+          ...state,
           board: newBoard,
           selected: to,
           moves: [...state.moves, [selectedTile, to]],
@@ -86,6 +87,7 @@ export const createGameSlice: StateCreator<GameSlice> = (set, get) => ({
   },
   restart: () => {
     set(state => ({
+      ...state,
       board: state.level.startingConfiguration,
       restarts: state.restarts + 1,
       selected: null,
@@ -106,12 +108,13 @@ export const createGameSlice: StateCreator<GameSlice> = (set, get) => ({
           }
         }
       }
-      set({
+      set(state => ({
+        ...state,
         board: newBoard,
         selected: undo[0],
         hasWon: false,
         moves,
-      });
+      }));
     }
   },
 });

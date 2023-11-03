@@ -1,2 +1,3 @@
 export * from "./Modal";
-export * from "./ModalScreen";
+export * from "./WinModal";
+export * from "./SettingsModal";

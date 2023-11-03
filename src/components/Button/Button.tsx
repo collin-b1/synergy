@@ -11,7 +11,7 @@ export interface ButtonProps
 }
 
 export const Button: React.FC<ButtonProps> = props => {
-  const { children, ...rest } = props;
+  const { children, className, ...rest } = props;
 
   return (
     <button
@@ -23,7 +23,7 @@ export const Button: React.FC<ButtonProps> = props => {
           "disabled:bg-slate-400 disabled:drop-shadow-none",
           "dark:border dark:border-slate-600 dark:bg-transparent dark:text-slate-300",
           "dark:disabled:border-dashed dark:disabled:bg-transparent dark:disabled:shadow-none",
-          props.className
+          className
         )
       )}
     >

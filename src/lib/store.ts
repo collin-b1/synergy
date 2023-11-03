@@ -4,7 +4,7 @@ import { GameSlice, createGameSlice } from "./slices/createGameSlice";
 
 type StoreState = GameSlice & LevelSlice;
 
-export const useSynergyStore = create<StoreState>((...a) => ({
+export const useSynergyStore = create<StoreState>()((...a) => ({
   ...createLevelSlice(...a),
   ...createGameSlice(...a),
 }));
