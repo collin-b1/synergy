@@ -17,7 +17,6 @@ export interface GameSlice extends Game {
   setLevel: (level: GameLevel) => void;
   selectTile: (pos: GridPosition) => void;
   moveSelected: (to: GridPosition) => void;
-  overrideGoal: (pos: GridPosition) => void;
   toggleHardMode: () => void;
   undo: () => void;
   restart: () => void;

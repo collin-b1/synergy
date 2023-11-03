@@ -18,7 +18,7 @@ interface LevelEditorProps {
 export const LevelEditor: React.FC<LevelEditorProps> = props => {
   // Level Details
   const selectedTile = useSynergyStore(state => state.selected);
-  const overrideGoal = useSynergyStore(state => state.overrideGoal);
+  const setLevel = useSynergyStore(state => state.setLevel);
 
   const [levelProperties, setLevelProperties] = useState<GameLevel>({
     startingConfiguration: createEmptyConfiguration(
@@ -35,11 +35,7 @@ export const LevelEditor: React.FC<LevelEditorProps> = props => {
 
   const [shareLink, setShareLink] = useState<string>("");
 
-  useEffect(() => {
-    const code = encodeLevelString(levelProperties);
-    setShareLink(`${window.location.href.split("editor")[0]}?code=${code}`);
-  }, [levelProperties]);
-
+  // Load level from code if present
   useEffect(() => {
     const { code } = props;
     if (code !== undefined) {
@@ -49,6 +45,17 @@ export const LevelEditor: React.FC<LevelEditorProps> = props => {
       }
     }
   }, [props]);
+
+  // Update the level share code on level update
+  useEffect(() => {
+    const code = encodeLevelString(levelProperties);
+    setShareLink(`${window.location.href.split("editor")[0]}?code=${code}`);
+  }, [levelProperties]);
+
+  // Update game store level to match level being edited
+  useEffect(() => {
+    setLevel(levelProperties);
+  }, [levelProperties, setLevel]);
 
   const setStartingConfiguration = (rows: number, columns: number) => {
     setLevelProperties(levelProperties => ({
@@ -99,7 +106,6 @@ export const LevelEditor: React.FC<LevelEditorProps> = props => {
       ...levelProperties,
       goal: tile,
     }));
-    overrideGoal(tile);
   };
 
   const insertTile = (tile: GridPosition, tileType: number) => {
