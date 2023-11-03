@@ -36,7 +36,7 @@ export const Tile = (props: TileProps) => {
     <button
       className={twMerge(
         clsx(
-          "aspect-square rounded transition-[ring] delay-0 ease-linear active:ring-2 motion-reduce:transition-none",
+          "mx-0.5 aspect-square flex-1 rounded transition-[ring] delay-0 ease-linear active:ring-2 motion-reduce:transition-none",
           CONSTANTS.TILE_COLORS.get(props.value),
           {
             "ring-4 ring-blue-500 ring-inset": props.isSelected,
