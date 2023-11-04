@@ -236,11 +236,11 @@ const levels: Array<GameLevel> = [
   },
   {
     startingConfiguration: [
-      [0, 1, 1, 1, 0],
+      [0, 4, 4, 4, 0],
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
-      [0, 0, 1, 5, 0],
-      [1, 3, 4, 0, 1],
+      [0, 0, 4, 5, 0],
+      [4, 3, 4, 0, 4],
     ],
     name: "Powered Tiles (Tutorial)",
     goal: { row: 2, column: 2 },
