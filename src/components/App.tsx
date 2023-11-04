@@ -61,7 +61,7 @@ function App() {
             </li>
             <li className="flex-1">
               <Link
-                to="https://github.com/collin-b1/synergy#game-objective"
+                to="https://github.com/collin-b1/synergy#how-to-play"
                 className="text-blue-500 hover:underline"
               >
                 How to Play

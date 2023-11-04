@@ -11,6 +11,7 @@ export const ControlBar: React.FC<ControlBarProps> = props => {
   const moves = useSynergyStore(state => state.moves);
   const totalLevels = useSynergyStore(state => state.levels.length);
   const restarts = useSynergyStore(state => state.restarts);
+  const hasWon = useSynergyStore(state => state.hasWon);
 
   const undo = useSynergyStore(state => state.undo);
   const restart = useSynergyStore(state => state.restart);
@@ -42,7 +43,9 @@ export const ControlBar: React.FC<ControlBarProps> = props => {
           props.setLevelNumber(level => level + 1);
         }}
         disabled={
-          props.levelNumber === totalLevels - 1 || props.levelNumber < 0
+          (hardMode && !hasWon) ||
+          props.levelNumber === totalLevels - 1 ||
+          props.levelNumber < 0
         }
       >
         ▷

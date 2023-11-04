@@ -43,8 +43,10 @@ export const Tile = (props: TileProps) => {
             "ring-4 ring-blue-500 ring-inset": props.isSelected,
             "flex justify-center items-center": props.isDestination,
             "ring-2 ring-purple-600": props.isGoal,
-            "bg-blue-900":
-              props.value === TileValue.POWERED && !props.isPlayerAdjacent,
+            "bg-blue-800":
+              props.value === TileValue.POWERED &&
+              !hardMode &&
+              !props.isPlayerAdjacent,
             "bg-portal bg-cover":
               props.isGoal && props.value === TileValue.EMPTY,
           }

@@ -247,6 +247,20 @@ const levels: Array<GameLevel> = [
     description:
       'Blue "Powered Tiles" may only move if they are adjacent to the player',
   },
+  {
+    startingConfiguration: [
+      [0, 4, 0, 4, 0, 4, 0],
+      [0, 4, 0, 0, 0, 2, 0],
+      [0, 2, 0, 0, 0, 4, 0],
+      [0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 5, 3, 5, 0, 2],
+    ],
+    author: "collin-b1",
+    name: "Stalactites",
+    goal: { row: 3, column: 3 },
+  },
 ];
 
 const getLevelCount = (): number => {
