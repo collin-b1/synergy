@@ -47,7 +47,7 @@ function App() {
                   state={{ loadedLevel }}
                   className="text-blue-500 hover:underline"
                 >
-                  Play
+                  Home
                 </Link>
               ) : (
                 <Link

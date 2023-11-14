@@ -1,6 +1,10 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { Board } from "@/components/Game";
-import { createEmptyConfiguration, encodeLevelString } from "@/utils";
+import {
+  createEmptyConfiguration,
+  encodeLevelString,
+  resizeArray,
+} from "@/utils";
 
 import { GameLevel, GridPosition, Tile } from "@/types";
 import { Button } from "@/components/Button";
@@ -50,33 +54,35 @@ export const Editor: React.FC<EditorProps> = props => {
     setLevel(levelProperties);
   }, [levelProperties, setLevel]);
 
-  const setStartingConfiguration = (rows: number, columns: number) => {
-    setLevelProperties(levelProperties => ({
-      ...levelProperties,
-      startingConfiguration: createEmptyConfiguration(rows, columns),
-    }));
-  };
-
   const handleChangeColumns = (e: ChangeEvent<HTMLInputElement>) => {
     const columns: number = parseInt(e.target.value);
     if (
       columns >= CONSTANTS.LEVEL.MIN_COLUMNS &&
       columns <= CONSTANTS.LEVEL.MAX_COLUMNS
     ) {
-      setStartingConfiguration(
-        levelProperties.startingConfiguration.length,
-        columns
+      const newBoard = levelProperties.startingConfiguration.map(arr =>
+        resizeArray(arr, columns, Tile.EMPTY)
       );
+      setLevelProperties(level => ({
+        ...level,
+        startingConfiguration: newBoard,
+      }));
     }
   };
 
   const handleChangeRows = (e: ChangeEvent<HTMLInputElement>) => {
     const rows: number = parseInt(e.target.value);
     if (rows >= CONSTANTS.LEVEL.MIN_ROWS && rows <= CONSTANTS.LEVEL.MAX_ROWS) {
-      setStartingConfiguration(
+      const columns = levelProperties.startingConfiguration[0].length;
+      const newBoard = resizeArray(
+        levelProperties.startingConfiguration,
         rows,
-        levelProperties.startingConfiguration[0].length
+        new Array(columns).fill(Tile.EMPTY)
       );
+      setLevelProperties(level => ({
+        ...level,
+        startingConfiguration: newBoard,
+      }));
     }
   };
 

@@ -1,14 +1,18 @@
 import type { GridConfiguration, GridPosition } from "@/types";
-import { Tile } from "@/components/Game";
+import { Tile } from "@/components/Game/Tile";
 import { useSynergyStore } from "@/lib/store";
 import { isPlayerAdjacent } from "@/utils";
+import { FunctionComponent } from "react";
 
 interface BoardProps {
   board: GridConfiguration;
   moveDestinations?: Array<GridPosition>;
 }
 
-export const Board: React.FC<BoardProps> = ({ board, moveDestinations }) => {
+export const Board: FunctionComponent<BoardProps> = ({
+  board,
+  moveDestinations,
+}) => {
   const goal = useSynergyStore(state => state.level.goal);
   const selected = useSynergyStore(state => state.selected);
 

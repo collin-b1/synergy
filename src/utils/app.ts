@@ -18,3 +18,14 @@ export const decodeLevelString = (code: string): GameLevel | undefined => {
     return undefined;
   }
 };
+
+export const resizeArray = <T>(
+  array: Array<T>,
+  size: number,
+  fill: T
+): Array<T> => {
+  const newArray = array
+    .concat(new Array(Math.max(0, size - array.length)).fill(fill))
+    .splice(0, size);
+  return newArray;
+};

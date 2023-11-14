@@ -1,9 +1,8 @@
 # [Synergy](https://collinb.me/synergy)
 
-<div style="text-align:center;">
-  <img src="synergy_demo.gif" height="350px"/>
-  <p>Synergy is a tile-moving puzzle game.</p>
-</div>
+<img src="synergy_demo.gif" height="350px"/>
+
+Synergy is a tile-moving puzzle game.
 
 # How to Play
 

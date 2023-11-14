@@ -44,7 +44,7 @@ const MOVABLE_TILES: TileSet = [Tile.OBSTACLE, Tile.PLAYER, Tile.POWERED];
 
 const TILE_COLORS = new Map<Tile, string>([
   [Tile.EMPTY, "bg-gray-300 dark:bg-slate-700"],
-  [Tile.WALL, "bg-gray-800"],
+  [Tile.WALL, "bg-gray-900 ring-1 ring-gray-500"],
   [Tile.OBSTACLE, "bg-gray-600 dark:bg-gray-200"],
   [Tile.PLAYER, "bg-red-400"],
   [Tile.STICKY, "bg-green-400"],

@@ -20,6 +20,7 @@ export const Tile = (props: TileProps) => {
   const setSelectedTile = useSynergyStore(state => state.selectTile);
   const moveSelected = useSynergyStore(state => state.moveSelected);
   const hardMode = useSynergyStore(state => state.hardMode);
+  const gridColumns = useSynergyStore(state => state.board[0].length);
 
   const handleSelectTile = () => {
     if (!props.isDestination) {
@@ -59,10 +60,13 @@ export const Tile = (props: TileProps) => {
         <div
           className={twMerge(
             clsx(
-              "absolute rounded-full bg-black/25 p-2 backdrop-blur-lg dark:bg-white/25",
+              "absolute rounded-full bg-black/25 backdrop-blur-lg dark:bg-white/25",
+              { "p-2": gridColumns < 10 },
+              { "p-1": gridColumns >= 10 },
               { "bg-black dark:bg-black": props.isGoal }
             )
           )}
+          aria-label="destination"
         ></div>
       ) : (
         <></>
